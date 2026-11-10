@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>讲解 · 秒懂数学</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="back" href="index.html">← 题库</a>
+    <div class="brand"><b>秒懂数学</b><span>MathLab</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="lesson-head">
+    <h1 id="title">加载中…</h1>
+    <div class="meta" id="meta" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <div class="q" id="question"></div>
+  </div>
+
+  <div class="lesson">
+
+    <div>
+      <div class="stage-card">
+        <svg class="stage" id="stage" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
+          <g data-layer></g>
+        </svg>
+
+        <div class="caption">
+          <div class="n" id="sn">1</div>
+          <div class="txt"><span id="say"></span><span class="why" id="why"></span></div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="prev">‹ 上一步</button>
+          <button class="btn primary" id="play">▶ 自动播放</button>
+          <button class="btn" id="next">下一步 ›</button>
+          <div class="progress"><i id="bar"></i></div>
+          <div class="speed" id="speed">
+            <button data-s="0.6">0.6×</button>
+            <button data-s="1" class="on">1×</button>
+            <button data-s="1.5">1.5×</button>
+            <button data-s="2">2×</button>
+          </div>
+          <button class="btn" id="sfx">音效：关</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="panel">
+        <h2>解法</h2>
+        <div class="methods" id="methods"></div>
+      </div>
+      <div class="panel">
+        <h2>这一步在算什么</h2>
+        <div class="eqcard" id="eq"></div>
+      </div>
+      <div class="panel">
+        <h2>步骤</h2>
+        <div class="steps" id="steps"></div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<script src="js/engine.js"></script>
+<script src="js/lessons/manifest.js"></script>
+<script>
+  document.write(window.LESSON_FILES.map(function (f) {
+    return '<script src="js/lessons/' + f + '"><\/script>';
+  }).join(''));
+</script>
+<script src="js/lesson.js"></script>
+
+</body>
+</html>
