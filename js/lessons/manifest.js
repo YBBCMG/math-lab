@@ -2,5 +2,6 @@
 window.LESSON_FILES = [
   'triangle-angle-sum.js',
   'parallelogram-area.js',
-  'perfect-square.js'
+  'perfect-square.js',
+  'viviani.js'
 ];
