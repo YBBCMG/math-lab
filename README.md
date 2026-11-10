@@ -2,6 +2,8 @@
 
 把每一道题拆成「一步一个动作」的动画讲解。纯静态，双击 `index.html` 就能看，也能直接丢到任何静态托管上。
 
+**线上地址：<https://ybbcmg.github.io/math-lab/>** —— 手机、电脑、教室投屏都能直接开，改完推上去约 1 分钟自动生效。
+
 ## 现在有什么
 
 | 题目 | 年级 | 专题 | 解法 |
@@ -102,12 +104,13 @@ ML.round1(x)        // 保留一位小数
 
 ## 部署
 
-纯静态，没有构建步骤、没有外部依赖。
+纯静态，没有构建步骤、没有外部依赖。现在跑在 **GitHub Pages**（仓库 `YBBCMG/math-lab`，`main` 分支根目录），推上去就自动重建。
 
 ```bash
-# 任意静态托管都行，例如
-surge ./math-lab 你的域名.surge.sh
+node ../_push.mjs index.html js/lessons/新题目.js   # 按文件推（token 从 ../.gh_token 读，不落盘到仓库）
 ```
+
+也可以丢到任何其他静态托管，例如 `surge ./ 你的域名.surge.sh`。
 
 ⭐ **不要用 ES module**（`type="module"`）。`file://` 直接双击打开时会被 CORS 拦成白屏。全部用普通 `<script>` + 全局变量。
 
@@ -128,4 +131,11 @@ node _check.mjs          # 回归自检：几何断言 + 内容断言 + 交互�
 | 控制台 | 全程 0 个 JS 报错 |
 
 > 判几何**不能**用 `getBoundingClientRect` —— 它给的是「旋转后包围盒的包围盒」，会虚胖十几像素。必须沿路径 `getPointAtLength` 采样再换算回 viewBox。
+
+## 更新日志
+
+| 日期 | 变更 |
+|---|---|
+| 2026-11-11 | 上线 GitHub Pages；README 补线上地址与推送方式 |
+| 2026-11-10 | 首版：三角形内角和、平行四边形面积、完全平方公式 三道题 + 播放器 + 几何回归自检 |
 
