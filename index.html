@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秒懂数学 · 把每道题拆成看得懂的动画</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><b>秒懂数学</b><span>MathLab</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>把每一道题，拆成看得懂的动画</h1>
+    <p>切一切、转一转、拼一拼。每一步只做一件事，每一步都说清楚——为什么可以这么做。</p>
+    <div class="searchbar">
+      <input id="q" type="search" placeholder="搜题：三角形内角和、面积、完全平方……" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<script src="js/engine.js"></script>
+<script src="js/lessons/manifest.js"></script>
+<script>
+  // 逐题加载（用 document.write 保证顺序，且 file:// 下不被 CORS 拦）
+  document.write(window.LESSON_FILES.map(function (f) {
+    return '<script src="js/lessons/' + f + '"><\/script>';
+  }).join(''));
+</script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
