@@ -233,6 +233,16 @@
     if (shape && shape.style) paint(shape, next);
   };
 
+  // 立即移除，不做淡出。
+  // 用于「整张图换一张」：淡出 + 淡入会重叠成一团，读数会糊；这种场合要瞬切。
+  Stage.prototype.rip = function (id) {
+    var g = this.nodes[id];
+    if (!g) return;
+    if (g.parentNode) g.parentNode.removeChild(g);
+    delete this.nodes[id];
+    delete this.colors[id];
+  };
+
   Stage.prototype.del = function (id) {
     var g = this.nodes[id];
     if (!g) return;
@@ -249,6 +259,7 @@
 
   function applyStep(stage, step, animate) {
     var run = function () {
+      if (step.delNow) step.delNow.forEach(function (id) { stage.rip(id); });
       if (step.del) step.del.forEach(function (id) { stage.del(id); });
       if (step.upd) step.upd.forEach(function (u) { stage.upd(u); });
       if (step.add) step.add.forEach(function (s) { stage.add(s, animate); });
