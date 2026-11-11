@@ -78,8 +78,10 @@
   function ledger(p) {
     return function (lines) {
       return lines.map(function (t, i) {
-        return AN.txt(p + 'led' + i, [575, 116 + i * 30], t, {
-          size: 16, anchor: 'start',
+        // 最长一条「∠CAF = ∠CAD = 54°，∠ACF = 90° + α = 108°」16px 时宽 357，落在 575 右缘到 932（切掉 32px）；
+        // 这一步左半屏被图形占满插不进去，只能左移到 560 + 缩到 14px（实测右缘 872）。
+        return AN.txt(p + 'led' + i, [560, 116 + i * 30], t, {
+          size: 14, anchor: 'start',
           color: i === lines.length - 1 ? COL.RED : COL.INK
         });
       });
@@ -198,6 +200,9 @@
      方法二：补短
      ============================================================ */
   var f2 = fig('w');
+  // B 正好落在「补短」那条红线 AM 上（A、B、M 共线），顶点字母默认没有白描边，
+  // 红线会从字母上划过去（_collide3 实测 2% 段长压进 bbox）。这个副本带 halo。
+  var nBhalo = Object.assign({}, f2.nB, { id: 'wnBh', halo: true });
   var sBM = { id: 'wsBM', k: 'line', a: Bp, b: Mp, stroke: COL.EDGE, sw: 2.4 };
   var nMB = AN.txt('wnM', [Mp[0] - 12, Mp[1] + 22], 'M', { size: FS.V, weight: 700, anchor: 'end' });
 
@@ -230,8 +235,8 @@
     {
       say: '补短：延长 AB 到 M，使 BM = BC。这样 AM = AB + BC 就成了一条线段，接下来只要证 AM = CF。',
       cite: '补短法：延长一条线段，使延长部分等于另一条已知线段',
-      delNow: LD2,
-      add: [sBM, nMB, tkBM, tkBC2, heavy('whlAM', Ap, Mp, COL.RED)]
+      delNow: LD2.concat(['wB']),   // 顶点字母的真实 id 是「前缀+B」，不是 wnB
+      add: [sBM, nMB, nBhalo, tkBM, tkBC2, heavy('whlAM', Ap, Mp, COL.RED)]
         .concat(led2(['补短：延长 AB 到 M，BM = BC', '只要再证 AM = CF'])),
       front: ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM',
               'waB', 'waC'],
