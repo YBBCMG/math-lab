@@ -25,7 +25,9 @@
       { id: 'segAL', k: 'text', at: [X - 20, Y + a / 2], text: 'a', size: 16, fill: BLUE },
       { id: 'segBL', k: 'text', at: [X - 20, YS + b / 2], text: 'b', size: 16, fill: ORNG },
       { id: 'lbB', k: 'text', at: [(X + X1) / 2, Y1 + 32], text: 'a + b', size: 18, fill: INK },
-      { id: 'lbL', k: 'text', at: [X - 44, (Y + Y1) / 2], text: 'a + b', size: 18, fill: INK }
+      // 竖边的总长「a + b」不再单独标：它左右各有 a、b 两个分段标签，串成一行会被读成
+      // 「a 段的高是 a + b」（视觉复盘连提两轮）。总长只留底边那一个 a + b，左竖边只讲分段。
+      // 要恢复就加一条括线，别只是把字挪远。
     ];
   }
 
