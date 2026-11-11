@@ -325,13 +325,14 @@
   var tkAF3 = AN.tick('xtkAF', Ap, Fp, COL.ORANGE, 9, 0);   // AF = TF
   var tkTF = AN.tick('xtkTF', Tp, Fp, COL.ORANGE, 9, 0);
 
-  var aBAF = AN.angle('xaBAF', Ap, Bp, Fp, 42, COL.GREEN);            // 54°
-  var aCAF3 = AN.angle('xaCAF', Ap, Cp, Fp, 42, COL.GREEN);           // 54°（同值同色同半径）
   // F 点挤了 5 个角（3×18° + 36° + 54°），半径必须分层；数字一律交给账本，
   // 因为 ∠CFB 的角平分线正好就是射线 FA，放数字必然压在 AF 线上。
-  var aAFB = AN.angle('xaAFB', Fp, Ap, Bp, 16, COL.ORANGE);          // 18°
-  var aAFC = AN.angle('xaAFC', Fp, Ap, Cp, 16, COL.ORANGE);          // 18°
-  var aBFT = AN.angle('xaBFT', Fp, Bp, Tp, 16, COL.ORANGE);          // 18°
+  // A 处两个 54° 用不同半径（方法二已有先例）：同半径会在 AF 处连成一个弧，看着像 ∠A=108°。
+  var aBAF = AN.angle('xaBAF', Ap, Bp, Fp, 58, COL.GREEN);           // 54°（外层）
+  var aCAF3 = AN.angle('xaCAF', Ap, Cp, Fp, 42, COL.GREEN);          // 54°（内层）
+  var aAFB = AN.angle('xaAFB', Fp, Ap, Bp, 24, COL.ORANGE);          // 18°
+  var aAFC = AN.angle('xaAFC', Fp, Ap, Cp, 24, COL.ORANGE);          // 18°
+  var aBFT = AN.angle('xaBFT', Fp, Bp, Tp, 24, COL.ORANGE);          // 18°
   var aCFB = AN.angle('xaCFB', Fp, Cp, Bp, 44, COL.BLUE);            // 36°，数字见账本
   var aCFT = AN.angle('xaCFT', Fp, Cp, Tp, 72, COL.GREEN);           // 54°，数字见账本
   var aCTF = AN.angle('xaCTF', Tp, Cp, Fp, 42, COL.GREEN, '54°', { size: 15 });
