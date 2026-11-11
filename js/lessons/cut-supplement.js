@@ -371,7 +371,7 @@
     {
       say: '另一边，∠DAF = ∠DAB + ∠BAF：前半是 ∠DAC（角平分线），后半是 θ。两头一对照，∠ADF = ∠DAF，于是 AF = DF。',
       cite: '角的和；等角对等边（△ADF 中 ∠ADF = ∠DAF ⟹ AF = DF）',
-      delNow: LD3,
+      delNow: LD3.concat(['xfACF']),
       add: [fADF3, tkDF3].concat(aDAF, led3(['∠DAF = ∠DAB + ∠BAF = ∠DAC + θ', '⟹ ∠ADF = ∠DAF ⟹ AF = DF'])),
       front: lift3,
       eq: 'AF = DF'
