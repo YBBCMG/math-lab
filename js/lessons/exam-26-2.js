@@ -298,6 +298,137 @@
   ];
 
   /* ============================================================
+     方法三：补长 CB —— 延长 CB 到 T 使 BT = AB，连 TF 证 △CFT 等腰
+     ------------------------------------------------------------
+     △ABF ≌ △ACF（SAS：AB = AC，∠BAF = ∠CAF = 54°，AF 公共）
+        ⟹ BF = CF，∠ABF = ∠ACF = 108°，∠AFB = ∠AFC = 18°
+     ∠CBF = ∠ABF − ∠ABC = 108° − 36° = 72°，∠TBF = 180° − 72° = 108° = ∠ABF
+     △ABF ≌ △TBF（SAS：AB = BT，∠ABF = ∠TBF，BF 公共）
+        ⟹ ∠BFT = ∠BFA = 18°，∠BTF = ∠BAF = 54°
+     ∠CFB = ∠AFC + ∠AFB = 36° ⟹ ∠CFT = ∠CFB + ∠BFT = 54°
+     T、B、C 同向 ⟹ ∠CTF = ∠BTF = 54° ⟹ ∠CFT = ∠CTF ⟹ CF = CT = CB + BT = BC + AB
+     ============================================================ */
+  var f3 = fig('x');
+  var Tp = add(Bp, mul(unit(sub(Bp, Cp)), AB));   // 延长 CB 过 B 到 T，BT = AB
+  // CT 是竖直高亮线（x = B.x），会从顶点字母 B 上划过去；给 B 一个带白描边的副本
+  var nBhalo3 = Object.assign({}, f3.nB, { id: 'xnBh', halo: true });
+
+  var sBT = { id: 'xsBT', k: 'line', a: Bp, b: Tp, stroke: COL.EDGE, sw: 2.4 };
+  var sTF = { id: 'xsTF', k: 'line', a: Tp, b: Fp, stroke: COL.EDGE, sw: 2.4 };
+  var sBF = { id: 'xsBF', k: 'line', a: Bp, b: Fp, stroke: COL.EDGE, sw: 2.4 };
+  var nT3 = AN.txt('xnT', [Tp[0] + 17, Tp[1] + 6], 'T', { size: FS.V, weight: 700 });
+
+  var tkBT = AN.tick('xtkBT', Bp, Tp, COL.TEAL, 9, 0);      // BT = AB
+  var tkAB3 = AN.tick('xtkAB', Ap, Bp, COL.TEAL, 9, 0);
+  var tkBF = AN.tick('xtkBF', Bp, Fp, COL.GREEN, 9, 0);     // BF = CF
+  var tkCF3 = AN.tick('xtkCF', Cp, Fp, COL.GREEN, 9, 0);
+  var tkAF3 = AN.tick('xtkAF', Ap, Fp, COL.ORANGE, 9, 0);   // AF = TF
+  var tkTF = AN.tick('xtkTF', Tp, Fp, COL.ORANGE, 9, 0);
+
+  var aBAF = AN.angle('xaBAF', Ap, Bp, Fp, 42, COL.GREEN);            // 54°
+  var aCAF3 = AN.angle('xaCAF', Ap, Cp, Fp, 42, COL.GREEN);           // 54°（同值同色同半径）
+  // F 点挤了 5 个角（3×18° + 36° + 54°），半径必须分层；数字一律交给账本，
+  // 因为 ∠CFB 的角平分线正好就是射线 FA，放数字必然压在 AF 线上。
+  var aAFB = AN.angle('xaAFB', Fp, Ap, Bp, 16, COL.ORANGE);          // 18°
+  var aAFC = AN.angle('xaAFC', Fp, Ap, Cp, 16, COL.ORANGE);          // 18°
+  var aBFT = AN.angle('xaBFT', Fp, Bp, Tp, 16, COL.ORANGE);          // 18°
+  var aCFB = AN.angle('xaCFB', Fp, Cp, Bp, 44, COL.BLUE);            // 36°，数字见账本
+  var aCFT = AN.angle('xaCFT', Fp, Cp, Tp, 72, COL.GREEN);           // 54°，数字见账本
+  var aCTF = AN.angle('xaCTF', Tp, Cp, Fp, 42, COL.GREEN, '54°', { size: 15 });
+  var aCBF = AN.angle('xaCBF', Bp, Cp, Fp, 48, COL.TEAL, '72°', { size: 15 });
+  // F 的顶点字母往左让开 18° 小弧（共享的 xnF 在 -26 处，只改本题这份副本的落点）
+  var nF3 = Object.assign({}, f3.nF, { at: [Fp[0] - 38, Fp[1] + 6] });
+
+  var fABF = { id: 'xfABF', k: 'poly', pts: [Ap, Bp, Fp], fill: AN.wash('124,58,237', 0.13), stroke: 'none' };
+  var fACF3 = { id: 'xfACF', k: 'poly', pts: [Ap, Cp, Fp], fill: AN.wash('124,58,237', 0.13), stroke: 'none' };
+  var fTBF = { id: 'xfTBF', k: 'poly', pts: [Tp, Bp, Fp], fill: AN.wash('14,116,144', 0.13), stroke: 'none' };
+
+  var lift3 = ['xsAB', 'xsBC', 'xsCA', 'xsAF', 'xsCF', 'xsBT', 'xsTF', 'xsBF',
+               'xaB', 'xaC', 'xaBAF', 'xaCAF', 'xaAFB', 'xaAFC', 'xaBFT',
+               'xaCFB', 'xaCFT', 'xaCTF', 'xaCBF'];
+
+  var LD3 = ['xled0', 'xled1', 'xled2', 'xled3', 'xled4'];
+  var led3 = ledger('x');
+
+  var steps3 = [
+    {
+      say: '同一道题，第三种走法，也是最短的一种。α = 18° ⟹ ∠A = 108°，∠B = ∠C = 36°；第 (1) 问的 ∠F = 18° 照用，∠ACF = 90° + α = 108°。',
+      cite: 'α = 18° ⟹ ∠B = ∠C = 2α = 36°，∠A = 108°；∠F = α，∠ACF = 90° + α',
+      add: [f3.fill, f3.sAB, f3.sBC, f3.sCA, f3.sAF, f3.sCF,
+            f3.nA, f3.nB, f3.nC, f3.nD, nF3]
+        .concat(f3.aB, f3.aC, [f3.cap]),
+      eq: '∠B = ∠C = 36°，∠A = 108°'
+    },
+    {
+      say: '延长 CB 到 T，让 BT = AB，再连 TF。这样 CT 就是 CB 加 BT，也就是 BC 加 AB —— 整条等式只剩一句话要证：CF = CT。',
+      cite: '补长：在 BC 的延长线上截取 BT = AB',
+      delNow: LD3.concat(['xB']),   // 顶点字母的真实 id 是「前缀+B」，不是 xnB
+      add: [sBT, sTF, nT3, nBhalo3, tkBT, tkAB3, heavy('xhlCT', Cp, Tp, COL.RED)]
+        .concat(led3(['延长 CB 到 T，BT = AB', 'CT = CB + BT = BC + AB', '只要再证 CF = CT'])),
+      front: lift3,
+      eq: 'CT = BC + AB'
+    },
+    {
+      say: '△ACF 里，∠ACF = 108°、∠AFC = 18°，所以 ∠CAF = 54°。而 ∠BAC = 108°，AF 夹在 BA 和 CA 中间 —— ∠BAF 也是 54°。',
+      cite: '三角形内角和 180°：∠CAF = 180° − 108° − 18° = 54°；∠BAF = ∠BAC − ∠CAF',
+      delNow: LD3,
+      add: aBAF.concat(aCAF3, led3(['∠CAF = 180° − 108° − 18° = 54°', '∠BAF = 108° − 54° = 54°'])),
+      front: lift3,
+      eq: '∠BAF = ∠CAF = 54°'
+    },
+    {
+      say: 'AB = AC 是题设的等腰，∠BAF = ∠CAF，AF 又是公共边 —— 两边夹一角，SAS，△ABF ≌ △ACF。',
+      cite: 'SAS：两边及其夹角分别相等的两个三角形全等',
+      delNow: LD3,
+      add: [fABF, fACF3].concat(led3(['AB = AC，∠BAF = ∠CAF，AF = AF', '⟹ △ABF ≌ △ACF（SAS）'])),
+      front: lift3,
+      eq: '△ABF ≌ △ACF（SAS）'
+    },
+    {
+      say: '对应边角全拿到：BF = CF，∠ABF = ∠ACF = 108°，∠AFB = ∠AFC = 18°。BF = CF 是后面要用的桥。',
+      cite: '全等三角形对应边相等、对应角相等',
+      delNow: LD3,
+      add: [sBF, tkBF, tkCF3].concat(aAFB, led3(['BF = CF，∠ABF = 108°，∠AFB = ∠AFC = 18°'])),
+      front: lift3,
+      eq: 'BF = CF，∠ABF = 108°，∠AFB = 18°'
+    },
+    {
+      say: '∠ABF = 108° 里挖掉 ∠ABC = 36°，剩下 ∠CBF = 72°。C、B、T 在一条直线上，∠TBF = 180° − 72° = 108° —— 和 ∠ABF 一样大。',
+      cite: '角的和差；平角 180°（C、B、T 共线）',
+      delNow: LD3,
+      add: aCBF.concat(led3(['∠CBF = 108° − 36° = 72°', '∠TBF = 180° − 72° = 108° = ∠ABF'])),
+      front: lift3,
+      eq: '∠TBF = ∠ABF = 108°'
+    },
+    {
+      say: 'AB = BT，∠ABF = ∠TBF，BF 公共 —— 又是 SAS，这一次是 △ABF ≌ △TBF。对应角：∠BFT = ∠BFA = 18°，∠BTF = ∠BAF = 54°。',
+      cite: 'SAS；全等三角形对应角相等',
+      delNow: LD3,
+      add: [fTBF, aBFT].concat(led3(['AB = BT，∠ABF = ∠TBF，BF = BF', '⟹ △ABF ≌ △TBF（SAS）', '∠BFT = 18°，∠BTF = 54°'])),
+      front: lift3,
+      eq: '△ABF ≌ △TBF（SAS）'
+    },
+    {
+      say: 'T、B、C 是同一个方向，所以 ∠CTF 就是 ∠BTF = 54°。另一头：∠CFB = ∠AFC + ∠AFB = 36°，再加 ∠BFT = 18°，∠CFT = 54°。两个角都是 54°，等角对等边 —— CF = CT。',
+      cite: '等角对等边（△CFT 中 ∠CFT = ∠CTF ⟹ CF = CT）；射线 TB 与射线 TC 同向',
+      delNow: LD3,
+      add: aCTF.concat(aCFB, aCFT, led3(['∠CTF = ∠BTF = 54°', '∠CFB = 18° + 18° = 36°',
+        '∠CFT = 36° + 18° = 54° = ∠CTF', '⟹ CF = CT'])),
+      front: lift3,
+      eq: 'CF = CT'
+    },
+    {
+      say: 'CT 本来就是 CB 加 BT，BT 又等于 AB —— CF = AB + BC。三种走法，同一条结论。',
+      cite: '等量代换',
+      delNow: LD3,
+      add: [tkAF3, tkTF].concat(led3(['CF = CT = CB + BT = BC + AB', 'CF = AB + BC'])),
+      front: lift3,
+      eq: 'CF = AB + BC',
+      hold: 4200
+    }
+  ];
+
+  /* ============================================================
      注册
      ============================================================ */
   window.MATHLAB_LESSONS = window.MATHLAB_LESSONS || [];
@@ -319,6 +450,11 @@
         name: '补短法 · 延长 AB 到 T 使 BT = BC', tier: 'proof',
         sub: '严格证明 · 8 步，等腰 + ASA 全等',
         steps: steps2
+      },
+      {
+        name: '补长法 · 延长 CB 到 T 使 BT = AB', tier: 'proof',
+        sub: '严格证明 · 9 步，两次 SAS 全等 + 等角对等边',
+        steps: steps3
       }
     ]
   });
