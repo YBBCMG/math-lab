@@ -130,6 +130,10 @@
       say: '先把高度切成两段：上面一段是 a，下面一段是 b。',
       cite: '线段可分成 a + b 两段',
       why: '切成两层，每一层都还是一条完整的、长为 (a+b) 的长方形。',
+      // 这一步只横切一刀，图上还没有竖线：顶边原来那两个「a | b」标签指的是一条不存在的分界
+      // （视觉复核原话：「标了 a、b 两段，却没有任何竖直分割线」），一并撤掉，等到第 7 步画竖线时再放回来。
+      // 左竖边同理：旧的 segAL/segBL 由下面两条新标签接手，不撤就是两个字母差 6px 叠着画。
+      delNow: ['segAL', 'segBL', 'segAT', 'segBT'],
       add: [
         { id: 'stripA', k: 'rect', x: X, y: Y, w: S, h: a, fill: BLUE, stroke: BLUE, sw: 2, op: 0.42 },
         { id: 'stripB', k: 'rect', x: X, y: YS, w: S, h: b, fill: GREEN, stroke: GREEN, sw: 2, op: 0.42 },
@@ -161,7 +165,10 @@
       why: '两种切法的落点一模一样：都是那四块，谁也逃不掉一个 ab。',
       eq: '(a+b)² = a² + ab + ab + b²',
       add: [
-        { id: 'cutV', k: 'line', a: [XS, Y], b: [XS, Y1], stroke: ORNG, sw: 2, dash: [8, 6] }
+        { id: 'cutV', k: 'line', a: [XS, Y], b: [XS, Y1], stroke: ORNG, sw: 2, dash: [8, 6] },
+        // 竖线出来了，顶边的 a | b 这时才有对应的分界
+        { id: 'segAT', k: 'text', at: [X + a / 2, Y - 16], text: 'a', size: 16, fill: BLUE },
+        { id: 'segBT', k: 'text', at: [XS + b / 2, Y - 16], text: 'b', size: 16, fill: ORNG }
       ]
     },
     {
