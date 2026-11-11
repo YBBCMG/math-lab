@@ -23,7 +23,7 @@
        ∠DAF = ∠DAB + ∠BAF = ∠DAC + θ ⟹ ∠ADF = ∠DAF ⟹ AF = DF
        ⟹ AC = DF = DB + BF = BD + AB
 
-   角标规矩：弧半径统一 34（同顶点两弧才拉开到 60），数字只离弧 9px；
+   角标规矩：弧半径统一 34（同顶点两弧才拉开；方法三那对相等的绿角同为 70），数字只离弧 9px；
             同值同色（θ 蓝 / 2θ 紫），算得出来的角不写数字，交给账本。
    ============================================================ */
 (function () {
@@ -98,9 +98,11 @@
     // 同一个值只用一种颜色：θ 蓝、2θ 紫
     e.aC = ang(p + 'aC', Cp, Bp, Ap, COL.BLUE, 'θ');
     e.aB = ang(p + 'aB', Bp, Ap, Cp, COL.PURPLE, '2θ');
-    // AD 平分 ∠A：两侧各一道同色小弧（同色 = 相等）
-    e.bis = AN.angle(p + 'bis1', Ap, Bp, Dp, 30, COL.INK, null, { sw: 3 })
-      .concat(AN.angle(p + 'bis2', Ap, Dp, Cp, 30, COL.INK, null, { sw: 3 }));
+    // AD 平分 ∠A：两侧各一道同色小弧（同色 = 相等）。
+    // 半径必须错开：两弧同半径会首尾相接、被 AD 一穿就看成「一整条弧跨过整个 ∠A」
+    // （视觉复核原话：「A 处只有一段黑弧，看不出 AD 平分角」）。26 / 38 才看得出是两道。
+    e.bis = AN.angle(p + 'bis1', Ap, Bp, Dp, 26, COL.INK, null, { sw: 3 })
+      .concat(AN.angle(p + 'bis2', Ap, Dp, Cp, 38, COL.INK, null, { sw: 3 }));
 
     e.cap = AN.txt(p + 'cap', [620, 40], '∠B = 2∠C：设 ∠C = θ ⟹ ∠B = 2θ', { size: 16, anchor: 'start' });
     return e;
@@ -148,7 +150,7 @@
     {
       say: '在 AC 上截一段 AE，让 AE = AB。这样 AB 这一段就被搬到了长边上面，剩下只要搞定 EC = BD。',
       cite: '截长法：在长线段上截取一段等于已知线段',
-      delNow: LD1,
+      delNow: LD1.concat(['vhlAC']),          // 整条 AC 的高亮先撤，收口时拆成 AE + EC 两色
       add: [nE, tkAE, tkAB].concat(led1(['在 AC 上取 E，使 AE = AB', '只要再证 EC = BD'])),
       front: lift1,
       eq: 'AE = AB'
@@ -210,21 +212,24 @@
      ============================================================ */
   var f2 = fig('w');
   var sBF2 = line('wsBF', Bp, F2);
+  var sDF2 = line('wsDF', Dp, F2);                    // △BDF、△ADF 都要这条边
   var tkBF2 = AN.tick('wtkBF', Bp, F2, COL.ORANGE);
   var tkBD2 = AN.tick('wtkBD', Bp, Dp, COL.ORANGE);
   var tkAF = AN.tick('wtkAF', Ap, F2, COL.GREEN);
   var tkAC2 = AN.tick('wtkAC', Ap, Cp, COL.GREEN);
 
+  // ∠DBF 是算出来的平角（180° − 2θ）：画一道青弧指出「结论说的是哪个角」
+  var aLin2 = ang('waLinB', Bp, Dp, F2, COL.TEAL, null, 48);
   var aBFD = ang('waBFD', F2, Bp, Dp, COL.BLUE, 'θ');
-  var aBDF = ang('waBDF', Dp, Bp, F2, COL.BLUE);
+  var aBDF = ang('waBDF', Dp, Bp, F2, COL.BLUE, 'θ');
 
   var fADF = poly('wfADF', [Ap, Dp, F2]);
   var fADC = poly('wfADC', [Ap, Dp, Cp]);
 
   var nF2 = AN.txt('wF', [F2[0] - 18, F2[1] + 8], 'F', { size: FS.V, weight: 700, anchor: 'end' });
 
-  var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAD', 'wsBF',
-               'waC', 'waB', 'wbis1', 'wbis2', 'waBFD', 'waBDF'];
+  var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAD', 'wsBF', 'wsDF',
+               'waC', 'waB', 'wbis1', 'wbis2', 'waLinB', 'waBFD', 'waBDF'];
 
   var steps2 = [
     {
@@ -236,10 +241,10 @@
       eq: 'AC = AB + BD'
     },
     {
-      say: '把 AB 从 B 往外延长到 F，让 BF = BD。这样 AB + BD 就整个搬到了 AF 上，接下来只要证 AF = AC。',
+      say: '把 AB 从 B 往外延长到 F，让 BF = BD，再连 DF。这样 AB + BD 就整个搬到了 AF 上，接下来只要证 AF = AC。',
       cite: '补短法：延长一条线段，把两段拼成一整段',
       delNow: LD2,
-      add: [sBF2, nF2, tkBF2, tkBD2].concat(led2(['延长 AB 至 F，使 BF = BD', '只要再证 AF = AC'])),
+      add: [sBF2, sDF2, nF2, tkBF2, tkBD2].concat(led2(['延长 AB 至 F，使 BF = BD，连 DF', '只要再证 AF = AC'])),
       front: lift2,
       eq: 'AF = AB + BD'
     },
@@ -247,7 +252,7 @@
       say: 'A、B、F 共线，所以 ∠DBF = 180° − ∠ABC = 180° − 2θ。',
       cite: '平角 180°',
       delNow: LD2,
-      add: led2(['∠DBF = 180° − 2θ']),
+      add: [].concat(aLin2, led2(['∠DBF = 180° − 2θ'])),
       front: lift2,
       eq: '∠DBF = 180° − 2θ'
     },
@@ -268,7 +273,7 @@
       eq: '∠AFD = ∠ACD'
     },
     {
-      say: '另外半边：AD 是角平分线，∠DAF = ∠DAC；AD 又是两个三角形的公共边。两角夹一边，AAS 全等。',
+      say: '另外半边：AD 是角平分线，∠DAF = ∠DAC；AD 又是两个三角形的公共边。两个角加上其中一个角的对边，AAS 全等。',
       cite: 'AAS：两角分别相等且其中一组等角的对边相等',
       delNow: LD2,
       add: [fADF, fADC].concat(led2(['∠AFD = ∠ACD，∠DAF = ∠DAC，AD = AD', '⟹ △ADF ≌ △ADC（AAS）'])),
@@ -299,16 +304,27 @@
      ============================================================ */
   var f3 = fig('x');
   var sBF3 = line('xsBF', Bp, F3);
+  var sAF3 = line('xsAF', Ap, F3);                    // △ABF、△ACF、△ADF 都要这条边
   var tkAB3 = AN.tick('xtkAB', Ap, Bp, COL.ORANGE);
   var tkBF3 = AN.tick('xtkBF', Bp, F3, COL.ORANGE, 9, 30);
+  // AF = DF = AC 是「三长相等」这一族：用**双杠**和 BD = BF 那族（单杠）区分开。
+  // 单靠换位置解决不了 —— DF 整段都盖在 DB、BF 上面，只能换记号。
   var tkAC3 = AN.tick('xtkAC', Ap, Cp, COL.GREEN);
+  var tkAC3b = AN.tick('xtkAC2', Ap, Cp, COL.GREEN, 9, 7);
   var tkAF3 = AN.tick('xtkAF', Ap, F3, COL.GREEN);
-  var tkDF3 = AN.tick('xtkDF', Dp, F3, COL.GREEN);
+  var tkAF3b = AN.tick('xtkAF2', Ap, F3, COL.GREEN, 9, 7);
+  // DF 的中点正落在 FB 段上，会和 FB 的橙色刻痕挤成「同一段被标了两次」；
+  // 顺带 X→Y 方向把它推到靠 D 的那一头（26 ≈ D 起 26px，实测复核过不压 DB 的其它记号）。
+  var tkDF3 = AN.tick('xtkDF', Dp, F3, COL.GREEN, 9, -(dist(Dp, F3) / 2 - 26));
+  var tkDF3b = AN.tick('xtkDF2', Dp, F3, COL.GREEN, 9, -(dist(Dp, F3) / 2 - 33));
 
-  var aBAF = ang('xaBAF', Ap, Bp, F3, COL.BLUE, 'θ');
+  // 同理：∠ABF 也是算出来的平角，配一道青弧
+  var aLin3 = ang('xaLinB', Bp, Ap, F3, COL.TEAL, null, 48);
+  // gap 收小：绿弧（∠DAF，r=70）就在旁边，标签按默认 24 会贴到弧上
+  var aBAF = ang('xaBAF', Ap, Bp, F3, COL.BLUE, 'θ', 34, { gap: 13 });
   var aBFA = ang('xaBFA', F3, Bp, Ap, COL.BLUE, 'θ');
   // ∠ADF 与 ∠DAF 相等（都等于 ∠DAC + θ），同色、不写数字
-  var aADF = ang('xaADF', Dp, Ap, F3, COL.GREEN, null, 34);
+  var aADF = ang('xaADF', Dp, Ap, F3, COL.GREEN, null, 70);
   var aDAF = ang('xaDAF', Ap, Dp, F3, COL.GREEN, null, 70);
 
   var fACF = poly('xfACF', [Ap, Cp, F3]);
@@ -316,8 +332,8 @@
 
   var nF3 = AN.vname('xF', F3, O);
 
-  var lift3 = ['xsAB', 'xsBC', 'xsCA', 'xsAD', 'xsBF',
-               'xaC', 'xaB', 'xbis1', 'xbis2', 'xaBAF', 'xaBFA', 'xaADF', 'xaDAF'];
+  var lift3 = ['xsAB', 'xsBC', 'xsCA', 'xsAD', 'xsBF', 'xsAF',
+               'xaC', 'xaB', 'xbis1', 'xbis2', 'xaLinB', 'xaBAF', 'xaBFA', 'xaADF', 'xaDAF'];
 
   var steps3 = [
     {
@@ -329,18 +345,18 @@
       eq: 'AC = AB + BD'
     },
     {
-      say: '延长 CB 到 F，让 BF = AB。注意顺序：C、D、B、F 依次排开，B 夹在 D 和 F 中间 —— 这一点后面要用。',
+      say: '延长 CB 到 F，让 BF = AB，再连 AF。注意顺序：C、D、B、F 依次排开，B 夹在 D 和 F 中间 —— 这一点后面要用。',
       cite: '延长线作法：F 在射线 CB 上，B 在 C 与 F 之间',
       delNow: LD3,
-      add: [sBF3, nF3, tkAB3, tkBF3].concat(led3(['延长 CB 至 F，使 BF = AB', 'B 在 D 与 F 之间'])),
+      add: [sBF3, sAF3, nF3, tkAB3, tkBF3].concat(led3(['延长 CB 至 F，使 BF = AB，连 AF', 'B 在 D 与 F 之间'])),
       front: lift3,
       eq: 'BF = AB'
     },
     {
-      say: 'A、B、F 共线，所以 ∠ABF = 180° − ∠ABC = 180° − 2θ。',
+      say: 'C、B、F 共线，所以 ∠ABF = 180° − ∠ABC = 180° − 2θ。',
       cite: '平角 180°',
       delNow: LD3,
-      add: led3(['∠ABF = 180° − 2θ']),
+      add: [].concat(aLin3, led3(['∠ABF = 180° − 2θ'])),
       front: lift3,
       eq: '∠ABF = 180° − 2θ'
     },
@@ -356,7 +372,7 @@
       say: '把 ∠BFA 和 ∠ACB 放在一起看：都是 θ。在 △ACF 里两个底角相等，等角对等边，所以 AF = AC。',
       cite: '等角对等边（△ACF 中 ∠BFA = ∠ACB ⟹ AF = AC）',
       delNow: LD3,
-      add: [fACF, tkAC3, tkAF3].concat(led3(['∠BFA = θ = ∠ACB', '⟹ AF = AC'])),
+      add: [fACF, tkAC3, tkAC3b, tkAF3, tkAF3b].concat(led3(['∠BFA = θ = ∠ACB', '⟹ AF = AC'])),
       front: lift3,
       eq: 'AF = AC'
     },
@@ -372,14 +388,16 @@
       say: '另一边，∠DAF = ∠DAB + ∠BAF：前半是 ∠DAC（角平分线），后半是 θ。两头一对照，∠ADF = ∠DAF，于是 AF = DF。',
       cite: '角的和；等角对等边（△ADF 中 ∠ADF = ∠DAF ⟹ AF = DF）',
       delNow: LD3.concat(['xfACF']),
-      add: [fADF3, tkDF3].concat(aDAF, led3(['∠DAF = ∠DAB + ∠BAF = ∠DAC + θ', '⟹ ∠ADF = ∠DAF ⟹ AF = DF'])),
+      add: [fADF3, tkDF3, tkDF3b].concat(aDAF, led3(['∠DAF = ∠DAB + ∠BAF = ∠DAC + θ', '⟹ ∠ADF = ∠DAF ⟹ AF = DF'])),
       front: lift3,
       eq: 'AF = DF'
     },
     {
       say: '最后一步全是替换：DF 是 D 到 F，中间经过 B，所以 DF = DB + BF = DB + AB；而 DF = AF = AC。',
       cite: '等量代换',
-      delNow: LD3.concat(['xfACF', 'xfADF']),
+      // 收口这一步三条边改成整段绿粗线，等长刻痕就该退场：
+      // DF 那对双杠落在 DB 段里，留着会被读成「BD = AF」（视觉复核原话）。
+      delNow: LD3.concat(['xfACF', 'xfADF', 'xtkAC', 'xtkAC2', 'xtkAF', 'xtkAF2', 'xtkDF', 'xtkDF2']),
       add: [heavy('xhlDF', Dp, F3, COL.GREEN), heavy('xhlAC', Ap, Cp, COL.GREEN),
             heavy('xhlAF', Ap, F3, COL.GREEN)]
         .concat(led3(['AC = AF = DF = DB + BF = BD + AB', 'AC = AB + BD'])),
