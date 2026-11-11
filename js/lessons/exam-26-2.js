@@ -11,9 +11,11 @@
        ⟹ ∠AGF = 144°、∠GAF = 18° = ∠F ⟹ AG = GF
        ⟹ CF = CG + GF = AB + BC
 
-   方法二（补短）：延长 AB 到 M 使 BM = BC
-       △CBM 等腰 ⟹ ∠BCM = 18° ⟹ ∠ACM = 54° = ∠CAF，∠CAM = 108° = ∠ACF
-       ⟹ △ACM ≌ △CAF（ASA）⟹ AM = CF = AB + BC
+   方法二（补短）：延长 AB 到 T 使 BT = BC
+       △CBT 等腰 ⟹ ∠BCT = 18° ⟹ ∠ACT = 54° = ∠CAF，∠CAT = 108° = ∠ACF
+       ⟹ △CAT ≌ △ACF（ASA）⟹ AT = CF = AB + BC
+
+   注意：全等给出的是 AT = CF，不是 CT = CF（CT = 399.4，CF = 339.8，两者不相等）。
 
    标注纪律：图上只写「算不出来的那几个数」，其余靠同色弧 + 账本。
    第 (1) 问里的 E 与 CE 在这一问的证明里用不上，图上不再画。
@@ -204,23 +206,25 @@
   // 红线会从字母上划过去（_collide3 实测 2% 段长压进 bbox）。这个副本带 halo。
   var nBhalo = Object.assign({}, f2.nB, { id: 'wnBh', halo: true });
   var sBM = { id: 'wsBM', k: 'line', a: Bp, b: Mp, stroke: COL.EDGE, sw: 2.4 };
-  var nMB = AN.txt('wnM', [Mp[0] - 12, Mp[1] + 22], 'M', { size: FS.V, weight: 700, anchor: 'end' });
+  // △CAT 的第三边：原图只画了 A—T 的延长线，C—T 缺失，所谓「三角形」其实只有两条边
+  var sCT = { id: 'wsCT', k: 'line', a: Cp, b: Mp, stroke: COL.EDGE, sw: 2.4 };
+  var nMB = AN.txt('wnM', [Mp[0] - 14, Mp[1] + 26], 'T', { size: FS.V, weight: 700, anchor: 'end' });
 
   var tkBM = AN.tick('wtkBM', Bp, Mp, COL.ORANGE, 9, 0);
   var tkBC2 = AN.tick('wtkBC', Bp, Cp, COL.ORANGE, 9, 0);
   var tkAM = AN.tick('wtkAM', Ap, Mp, COL.RED, 9, 0);
   var tkCF2 = AN.tick('wtkCF', Cp, Fp, COL.RED, 9, 0);
 
-  var aCBM = AN.angle('waCBM', Bp, Dp, Mp, 54, COL.PURPLE, '144°', { size: 15, gap: 24 }); // 144° 一律紫
-  var aBCM = AN.angle('waBCM', Cp, Bp, Mp, 24, COL.ORANGE);      // = ∠BMC = 18°
+  var aCBM = AN.angle('waCBM', Bp, Dp, Mp, 54, COL.PURPLE, '144°', { size: 15, gap: 40 }); // 144° 一律紫
+  var aBCM = AN.angle('waBCM', Cp, Bp, Mp, 24, COL.ORANGE);      // = ∠BTC = 18°
   var aBMC = AN.angle('waBMC', Mp, Bp, Cp, 24, COL.ORANGE);
-  var aACM = AN.angle('waACM', Cp, Ap, Mp, 56, COL.GREEN);      // 54°，数字交给账本（那个角三面都是线，挤不下）
-  var aCAF = AN.angle('waCAF', Ap, Cp, Fp, 42, COL.GREEN);       // = ∠ACM = 54°
+  var aACM = AN.angle('waACM', Cp, Ap, Mp, 56, COL.GREEN);      // ∠ACT = 54°，数字交给账本（那个角三面都是线，挤不下）
+  var aCAF = AN.angle('waCAF', Ap, Cp, Fp, 42, COL.GREEN);       // = ∠ACT = 54°
 
   var fACM = { id: 'wfACM', k: 'poly', pts: [Ap, Cp, Mp], fill: AN.wash('37,99,235', 0.14), stroke: 'none' };
   var fCAF = { id: 'wfCAF', k: 'poly', pts: [Cp, Ap, Fp], fill: AN.wash('37,99,235', 0.14), stroke: 'none' };
 
-  var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM',
+  var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM', 'wsCT',
                'waB', 'waC', 'waCBM', 'waBCM', 'waBMC', 'waACM', 'waCAF'];
 
   var steps2 = [
@@ -233,60 +237,60 @@
       eq: 'CF = AB + BC'
     },
     {
-      say: '补短：延长 AB 到 M，使 BM = BC。这样 AM = AB + BC 就成了一条线段，接下来只要证 AM = CF。',
+      say: '补短：延长 AB 到 T，使 BT = BC。这样 AT = AB + BC 就成了一条线段，接下来只要证 AT = CF。',
       cite: '补短法：延长一条线段，使延长部分等于另一条已知线段',
       delNow: LD2.concat(['wB']),   // 顶点字母的真实 id 是「前缀+B」，不是 wnB
-      add: [sBM, nMB, nBhalo, tkBM, tkBC2, heavy('whlAM', Ap, Mp, COL.RED)]
-        .concat(led2(['补短：延长 AB 到 M，BM = BC', '只要再证 AM = CF'])),
-      front: ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM',
+      add: [sBM, sCT, nMB, nBhalo, tkBM, tkBC2, heavy('whlAT', Ap, Mp, COL.RED)]
+        .concat(led2(['补短：延长 AB 到 T，BT = BC', '只要再证 AT = CF'])),
+      front: ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM', 'wsCT',
               'waB', 'waC'],
-      eq: 'AM = AB + BC'
+      eq: 'AT = AB + BC'
     },
     {
-      say: 'A、B、M 共线，所以 ∠CBM = 180° − ∠ABC = 144°。又 CB = BM，等腰三角形两个底角相等，各 18°。',
+      say: 'A、B、T 共线，所以 ∠CBT = 180° − ∠ABC = 144°。又 CB = BT，等腰三角形两个底角相等，各 18°。',
       cite: '平角 180°；等腰三角形两底角相等，内角和 180°',
       delNow: LD2,
-      add: aCBM.concat(aBCM, aBMC, led2(['∠CBM = 180° − 36° = 144°', 'CB = BM ⟹ ∠BCM = ∠BMC = 18°'])),
+      add: aCBM.concat(aBCM, aBMC, led2(['∠CBT = 180° − 36° = 144°', 'CB = BT ⟹ ∠BCT = ∠BTC = 18°'])),
       front: lift2,
-      eq: '∠BCM = 18°'
+      eq: '∠BCT = 18°'
     },
     {
-      say: '∠ACM 是 ∠ACB 加 ∠BCM（CB 夹在中间）：36° + 18° = 54°。',
-      cite: '∠ACM = ∠ACB + ∠BCM（射线 CB 在 ∠ACM 内部）',
+      say: '∠ACT 是 ∠ACB 加 ∠BCT（CB 夹在中间）：36° + 18° = 54°。',
+      cite: '∠ACT = ∠ACB + ∠BCT（射线 CB 在 ∠ACT 内部）',
       delNow: LD2,
-      add: aACM.concat(led2(['∠ACM = ∠ACB + ∠BCM', '= 36° + 18° = 54°'])),
+      add: aACM.concat(led2(['∠ACT = ∠ACB + ∠BCT', '= 36° + 18° = 54°'])),
       front: lift2,
-      eq: '∠ACM = 54°'
+      eq: '∠ACT = 54°'
     },
     {
-      say: '△ACF 这边：∠CAF = 54°（∠A 的一半），∠ACF = 90° + α = 108°；而 ∠CAM = ∠CAB = 108°。',
-      cite: '∠CAF = ½∠BAC；∠CAM = ∠CAB（M 在 AB 的延长线上）；∠ACF = 90° + α',
+      say: '△ACF 这边：∠CAF = 54°（∠A 的一半），∠ACF = 90° + α = 108°；而 ∠CAT = ∠CAB = 108°。',
+      cite: '∠CAF = ½∠BAC；∠CAT = ∠CAB（T 在 AB 的延长线上）；∠ACF = 90° + α',
       delNow: LD2,
-      add: aCAF.concat(led2(['∠CAF = ∠CAD = 54°，∠ACF = 90° + α = 108°', '∠CAM = ∠CAB = 108°'])),
+      add: aCAF.concat(led2(['∠CAF = ∠CAD = 54°，∠ACF = 90° + α = 108°', '∠CAT = ∠CAB = 108°'])),
       front: lift2,
-      eq: '∠ACM = ∠CAF，∠CAM = ∠ACF'
+      eq: '∠ACT = ∠CAF，∠CAT = ∠ACF'
     },
     {
-      say: '两组角分别相等，夹边都是 AC（同一条边），ASA 判定，两个三角形全等。',
+      say: '两组角分别相等，夹边都是 AC（同一条边），ASA 判定，△CAT ≌ △ACF。',
       cite: 'ASA：两角及其夹边分别相等的两个三角形全等',
       delNow: LD2,
-      add: [fACM, fCAF].concat(led2(['∠ACM = ∠CAF，AC = CA，∠CAM = ∠ACF', '⟹ △ACM ≌ △CAF（ASA）'])),
+      add: [fACM, fCAF].concat(led2(['∠ACT = ∠CAF，AC = CA，∠CAT = ∠ACF', '⟹ △CAT ≌ △ACF（ASA）'])),
       front: lift2,
-      eq: '△ACM ≌ △CAF（ASA）'
+      eq: '△CAT ≌ △ACF（ASA）'
     },
     {
-      say: '全等的对应边：AM = CF。',
+      say: '全等的对应边：AT = CF。',
       cite: '全等三角形对应边相等',
       delNow: LD2,
-      add: [tkAM, tkCF2].concat(led2(['AM = CF'])),
+      add: [tkAM, tkCF2].concat(led2(['AT = CF'])),
       front: lift2,
-      eq: 'AM = CF'
+      eq: 'AT = CF'
     },
     {
-      say: 'AM 本来就是 AB 加 BM，把 BM 换回 BC —— CF = AB + BC。和截长法殊途同归。',
+      say: 'AT 本来就是 AB 加 BT，把 BT 换回 BC —— CF = AB + BC。和截长法殊途同归。',
       cite: '等量代换',
       delNow: LD2,
-      add: led2(['CF = AM = AB + BM = AB + BC', 'CF = AB + BC']),
+      add: led2(['CF = AT = AB + BT = AB + BC', 'CF = AB + BC']),
       front: lift2,
       eq: 'CF = AB + BC',
       hold: 4200
@@ -312,7 +316,7 @@
         steps: steps1
       },
       {
-        name: '补短法 · 延长 AB 到 M 使 BM = BC', tier: 'proof',
+        name: '补短法 · 延长 AB 到 T 使 BT = BC', tier: 'proof',
         sub: '严格证明 · 8 步，等腰 + ASA 全等',
         steps: steps2
       }
