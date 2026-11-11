@@ -8,5 +8,8 @@ window.LESSON_FILES = [
   'equilateral-altitude.js',
   'line-three-angle.js',
   'double-median.js',
-  'half-angle.js'
+  'half-angle.js',
+  'cut-supplement.js',
+  'exam-26-1.js',
+  'exam-26-2.js'
 ];
