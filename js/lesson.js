@@ -208,10 +208,6 @@
     void say.offsetWidth;
     say.style.animation = '';
 
-    var cite = $('cite');
-    cite.textContent = s.cite || '';
-    cite.style.display = s.cite ? 'block' : 'none';
-
     var why = $('why');
     why.textContent = s.why || '';
     why.style.display = s.why ? 'block' : 'none';

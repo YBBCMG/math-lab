@@ -63,14 +63,13 @@
     e.nD = AN.txt(p + 'nD', [Dp[0] - 16, Dp[1] + 15], 'D', { size: FS.V, weight: 700 });
     e.nF = AN.txt(p + 'nF', [Fp[0] - 26, Fp[1] + 6], 'F', { size: FS.V, weight: 700 });
 
-    // ∠B、∠C 都是 36°：弧在，数字交给题干那条 cap
-    e.aB = AN.angle(p + 'aB', Bp, Ap, Cp, 44, COL.BLUE);
-    e.aC = AN.angle(p + 'aC', Cp, Bp, Ap, 44, COL.BLUE);
-    // ∠ACF = 90° + α = 108°，与 ∠BAC 同色表示相等
-    e.aACF = AN.angle(p + 'aACF', Cp, Ap, Fp, 46, COL.TEAL, '108°', { size: 15, dir: 135, gap: 22 });
-    e.aBAC = AN.angle(p + 'aBAC', Ap, Bp, Cp, 62, COL.TEAL);
+    // 角标规矩：弧半径随角度大小递增；同值 = 同色同半径；数字只离弧 9px
+    // 36°（蓝）—— 数字由 cap 给出，弧上不重复写
+    e.aB = AN.angle(p + 'aB', Bp, Ap, Cp, 32, COL.BLUE);
+    e.aC = AN.angle(p + 'aC', Cp, Bp, Ap, 28, COL.BLUE);
+    // 108° 不画弧：cap 里已经写着 ∠A = 108°，account 本也给了 ∠ACF 的算法
 
-    e.cap = AN.txt(p + 'cap', [50, 46], 'α = 18° ⟹ ∠A = 108°，∠B = ∠C = 36°',
+    e.cap = AN.txt(p + 'cap', [50, 46], 'α = 18° ⟹ ∠F = 18°，∠B = ∠C = 36°，∠A = 108°',
       { size: 16, anchor: 'start' });
     return e;
   }
@@ -107,17 +106,17 @@
   var tkBC = AN.tick('vtkBC', Bp, Cp, COL.RED, 9, -62);
   var tkGF = AN.tick('vtkGF', Gp, Fp, COL.ORANGE, 9, 0);
 
-  var aCGA = AN.angle('vaCGA', Gp, Cp, Ap, 34, COL.BLUE);      // = ∠B = 36°
-  var aCAG = AN.angle('vaCAG', Ap, Cp, Gp, 38, COL.BLUE);      // = ∠C = 36°
-  var aAGF = AN.angle('vaAGF', Gp, Ap, Fp, 32, COL.PURPLE, '144°', { size: 15, dir: 90, gap: 18 });
-  var aGAF = AN.angle('vaGAF', Ap, Gp, Fp, 30, COL.ORANGE, '18°', { size: 15, dir: 189, gap: 110 });
-  var aAFG = AN.angle('vaAFG', Fp, Ap, Gp, 34, COL.ORANGE, '18°', { size: 15, dir: 351, gap: 86 });
+  var aCGA = AN.angle('vaCGA', Gp, Cp, Ap, 30, COL.BLUE);      // = ∠B = 36°
+  var aCAG = AN.angle('vaCAG', Ap, Cp, Gp, 30, COL.BLUE);      // = ∠C = 36°
+  var aAGF = AN.angle('vaAGF', Gp, Ap, Fp, 54, COL.PURPLE, '144°', { size: 15, dir: 35, gap: 24 });
+  var aGAF = AN.angle('vaGAF', Ap, Gp, Fp, 24, COL.ORANGE);     // 18°，数字由 cap 给出
+  var aAFG = AN.angle('vaAFG', Fp, Ap, Gp, 24, COL.ORANGE);     // 同值 = 同色同半径
 
   var fCGA = { id: 'vfCGA', k: 'poly', pts: [Cp, Gp, Ap], fill: AN.wash('15,157,88', 0.15), stroke: 'none' };
   var fABC = { id: 'vfABC', k: 'poly', pts: [Ap, Bp, Cp], fill: AN.wash('15,157,88', 0.15), stroke: 'none' };
 
   var lift1 = ['vsAB', 'vsBC', 'vsCA', 'vsAF', 'vsCF', 'vsAG',
-               'vaB', 'vaC', 'vaACF', 'vaBAC', 'vaCGA', 'vaCAG', 'vaAGF', 'vaGAF', 'vaAFG'];
+               'vaB', 'vaC', 'vaCGA', 'vaCAG', 'vaAGF', 'vaGAF', 'vaAFG'];
 
   var steps1 = [
     {
@@ -125,7 +124,7 @@
       cite: 'α = 18° ⟹ ∠B = ∠C = 2α = 36°，∠A = 108°；由第 (1) 问 ∠F = α = 18°',
       add: [f1.fill, f1.sAB, f1.sBC, f1.sCA, f1.sAF, f1.sCF,
             f1.nA, f1.nB, f1.nC, f1.nD, f1.nF]
-        .concat(f1.aB, f1.aC, f1.aACF, f1.aBAC, [f1.cap]),
+        .concat(f1.aB, f1.aC, [f1.cap]),
       eq: '∠B = ∠C = 36°，∠A = 108°'
     },
     {
@@ -207,18 +206,17 @@
   var tkAM = AN.tick('wtkAM', Ap, Mp, COL.RED, 9, 0);
   var tkCF2 = AN.tick('wtkCF', Cp, Fp, COL.RED, 9, 0);
 
-  var aCBM = AN.angle('waCBM', Bp, Dp, Mp, 40, COL.ORANGE, '144°', { size: 15, gap: 30 });
-  var aBCM = AN.angle('waBCM', Cp, Bp, Mp, 34, COL.ORANGE);      // = ∠BMC = 18°
-  var aBMC = AN.angle('waBMC', Mp, Bp, Cp, 32, COL.ORANGE);
-  var aACM = AN.angle('waACM', Cp, Ap, Mp, 70, COL.GREEN, '54°', { size: 15, dir: 70, gap: 22 });
-  var aCAF = AN.angle('waCAF', Ap, Cp, Fp, 38, COL.GREEN);       // = ∠ACM = 54°
-  var aCAM = AN.angle('waCAM', Ap, Cp, Mp, 62, COL.TEAL);        // = ∠ACF = 108°
+  var aCBM = AN.angle('waCBM', Bp, Dp, Mp, 54, COL.PURPLE, '144°', { size: 15, gap: 24 }); // 144° 一律紫
+  var aBCM = AN.angle('waBCM', Cp, Bp, Mp, 24, COL.ORANGE);      // = ∠BMC = 18°
+  var aBMC = AN.angle('waBMC', Mp, Bp, Cp, 24, COL.ORANGE);
+  var aACM = AN.angle('waACM', Cp, Ap, Mp, 56, COL.GREEN);      // 54°，数字交给账本（那个角三面都是线，挤不下）
+  var aCAF = AN.angle('waCAF', Ap, Cp, Fp, 42, COL.GREEN);       // = ∠ACM = 54°
 
   var fACM = { id: 'wfACM', k: 'poly', pts: [Ap, Cp, Mp], fill: AN.wash('37,99,235', 0.14), stroke: 'none' };
   var fCAF = { id: 'wfCAF', k: 'poly', pts: [Cp, Ap, Fp], fill: AN.wash('37,99,235', 0.14), stroke: 'none' };
 
   var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM',
-               'waB', 'waC', 'waACF', 'waBAC', 'waCBM', 'waBCM', 'waBMC', 'waACM', 'waCAF', 'waCAM'];
+               'waB', 'waC', 'waCBM', 'waBCM', 'waBMC', 'waACM', 'waCAF'];
 
   var steps2 = [
     {
@@ -226,7 +224,7 @@
       cite: 'α = 18°；由第 (1) 问 ∠F = α = 18°',
       add: [f2.fill, f2.sAB, f2.sBC, f2.sCA, f2.sAF, f2.sCF,
             f2.nA, f2.nB, f2.nC, f2.nD, f2.nF]
-        .concat(f2.aB, f2.aC, f2.aACF, f2.aBAC, [f2.cap]),
+        .concat(f2.aB, f2.aC, [f2.cap]),
       eq: 'CF = AB + BC'
     },
     {
@@ -236,7 +234,7 @@
       add: [sBM, nMB, tkBM, tkBC2, heavy('whlAM', Ap, Mp, COL.RED)]
         .concat(led2(['补短：延长 AB 到 M，BM = BC', '只要再证 AM = CF'])),
       front: ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM',
-              'waB', 'waC', 'waACF', 'waBAC'],
+              'waB', 'waC'],
       eq: 'AM = AB + BC'
     },
     {
@@ -259,7 +257,7 @@
       say: '△ACF 这边：∠CAF = 54°（∠A 的一半），∠ACF = 90° + α = 108°；而 ∠CAM = ∠CAB = 108°。',
       cite: '∠CAF = ½∠BAC；∠CAM = ∠CAB（M 在 AB 的延长线上）；∠ACF = 90° + α',
       delNow: LD2,
-      add: aCAF.concat(aCAM, led2(['∠CAF = ∠CAD = 54°，∠ACF = 108°', '∠CAM = ∠CAB = 108°'])),
+      add: aCAF.concat(led2(['∠CAF = ∠CAD = 54°，∠ACF = 90° + α = 108°', '∠CAM = ∠CAB = 108°'])),
       front: lift2,
       eq: '∠ACM = ∠CAF，∠CAM = ∠ACF'
     },

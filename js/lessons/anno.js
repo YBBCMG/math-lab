@@ -49,7 +49,7 @@
   // 显示字母 = id 去掉前缀 v/w（多方法讲稿靠前缀区分同名顶点）
   function vname(id, V, O, d) {
     var p = along(V, sub(V, O), d == null ? 30 : d);
-    return { id: id, k: 'text', at: p, text: id.replace(/^[vw]/, ''), size: FS.V, fill: COL.INK, weight: 700, halo: false };
+    return { id: id, k: 'text', at: p, text: id.replace(/^[vwux]/, ''), size: FS.V, fill: COL.INK, weight: 700, halo: false };
   }
 
   // 普通文字（默认外面的字不描边）

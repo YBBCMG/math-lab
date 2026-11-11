@@ -62,17 +62,18 @@
     e.nA = AN.vname(p + 'A', Ap, O);
     e.nB = AN.vname(p + 'B', Bp, O);
     e.nC = AN.vname(p + 'C', Cp, O);
-    e.nD = AN.txt(p + 'vD', [Dp[0] - 22, Dp[1] + 24], 'D', { size: FS.V, weight: 700 });
+    e.nD = AN.txt(p + 'vD', [Dp[0] - 26, Dp[1] + 26], 'D', { size: FS.V, weight: 700 });
     e.nE = AN.txt(p + 'vE', AN.along(Ep, sub(Ep, O), 24), 'E', { size: FS.V, weight: 700 });
     e.nF = AN.txt(p + 'vF', [Fp[0] - 26, Fp[1] + 6], 'F', { size: FS.V, weight: 700 });
 
     // ∠B = 2α；∠C 被 CE 分成两个 α
-    e.aB = AN.angle(p + 'aB', Bp, Ap, Cp, 44, COL.BLUE, '2α', { size: FS.NOTE });
-    e.aC1 = AN.angle(p + 'aC1', Cp, Bp, Ep, 46, COL.BLUE, 'α', { size: FS.NOTE, gap: 22 });
-    e.aC2 = AN.angle(p + 'aC2', Cp, Ep, Ap, 46, COL.BLUE, 'α', { size: FS.NOTE, gap: 22 });
+    e.aB = AN.angle(p + 'aB', Bp, Ap, Cp, 44, COL.PURPLE, '2α', { size: FS.NOTE, gap: 24 });
+    e.aC1 = AN.angle(p + 'aC1', Cp, Bp, Ep, 26, COL.BLUE, 'α', { size: FS.NOTE, gap: 18 });
+    // 同一个值只写一次数字：另一道 α 弧靠同色同半径表示相等
+    e.aC2 = AN.angle(p + 'aC2', Cp, Ep, Ap, 26, COL.BLUE, null, { size: FS.NOTE, gap: 18 });
     // ∠A 被 AD 平分：两道同色等半径的弧
-    e.bis = AN.angle(p + 'b1', Ap, Bp, Dp, 38, COL.PURPLE).concat(
-            AN.angle(p + 'b2', Ap, Dp, Cp, 38, COL.PURPLE));
+    e.bis = AN.angle(p + 'b1', Ap, Bp, Dp, 38, COL.INK, null, { sw: 3 }).concat(
+            AN.angle(p + 'b2', Ap, Dp, Cp, 38, COL.INK, null, { sw: 3 }));
 
     e.cap = AN.txt(p + 'cap', [50, 44], 'AB = AC，AD 平分 ∠A，CE 平分 ∠C，CF ⊥ CE',
       { size: FS.NOTE, anchor: 'start' });
@@ -102,8 +103,8 @@
   var raC = AN.right('vraC', Cp, sub(Ep, Cp), sub(Fp, Cp), 14, COL.RED);
   var tkBD = AN.tick('vtkBD', Bp, Dp, COL.GREEN, 9, -26);
   var tkDC = AN.tick('vtkDC', Dp, Cp, COL.GREEN, 9, 26);
-  var aDCF = AN.angle('vaDCF', Cp, Dp, Fp, 34, COL.ORANGE, '90° − α', { size: 15, gap: 32 });
-  var aF = AN.angle('vaF', Fp, Bp, Dp, 34, COL.RED, 'α', { size: 16, gap: 26 });
+  var aDCF = AN.angle('vaDCF', Cp, Dp, Fp, 66, COL.ORANGE, '90°−α', { size: 15, gap: 28, dir: 146 });
+  var aF = AN.angle('vaF', Fp, Bp, Dp, 34, COL.RED, 'α', { size: 16, gap: 24, dir: 25 });
 
   var lift1 = ['vsAB', 'vsBC', 'vsCA', 'vsAF', 'vsCE', 'vsCF',
                'vaB', 'vaC1', 'vaC2', 'vb1', 'vb2', 'vraD', 'vraDb', 'vraC', 'vaDCF', 'vaF'];
@@ -155,8 +156,8 @@
      ============================================================ */
   var f2 = fig('w');
   var raC2 = AN.right('wraC', Cp, sub(Ep, Cp), sub(Fp, Cp), 14, COL.RED);
-  var aACF = AN.angle('waACF', Cp, Ap, Fp, 46, COL.ORANGE, '90° + α', { size: 15, dir: 116, gap: 96 });
-  var aF2 = AN.angle('waF', Fp, Bp, Dp, 34, COL.RED, 'α', { size: 16, gap: 26 });
+  var aACF = AN.angle('waACF', Cp, Ap, Fp, 62, COL.ORANGE, '90°+α', { size: 15, gap: 28, dir: 135 });
+  var aF2 = AN.angle('waF', Fp, Bp, Dp, 34, COL.RED, 'α', { size: 16, gap: 24, dir: 25 });
 
   var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCE', 'wsCF',
                'waB', 'waC1', 'waC2', 'wb1', 'wb2', 'wraC', 'waACF', 'waF'];
