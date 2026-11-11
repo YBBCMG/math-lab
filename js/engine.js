@@ -269,6 +269,13 @@
     delete this.colors[id];
   };
 
+  // 把已有元素提到最上层：加半透明色块时，底下那条高线/直角符号会被盖淡，
+  // 用 front 把它们顶回最前面（不能走 add 重建，那会触发一次淡入闪烁）。
+  Stage.prototype.front = function (id) {
+    var g = this.nodes[id];
+    if (g && g.parentNode) g.parentNode.appendChild(g);
+  };
+
   Stage.prototype.del = function (id) {
     var g = this.nodes[id];
     if (!g) return;
@@ -289,6 +296,7 @@
       if (step.del) step.del.forEach(function (id) { stage.del(id); });
       if (step.upd) step.upd.forEach(function (u) { stage.upd(u); });
       if (step.add) step.add.forEach(function (s) { stage.add(s, animate); });
+      if (step.front) step.front.forEach(function (id) { stage.front(id); });
     };
     if (animate) run(); else stage.instant(run);
   }

@@ -4,5 +4,6 @@ window.LESSON_FILES = [
   'parallelogram-area.js',
   'perfect-square.js',
   'viviani.js',
-  'handshake.js'
+  'handshake.js',
+  'equilateral-altitude.js'
 ];
