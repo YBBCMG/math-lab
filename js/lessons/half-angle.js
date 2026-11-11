@@ -53,7 +53,8 @@
   var P_IDS = ['p0', 'p1', 'p2', 'p3'];
   function panel(lines) {
     return lines.map(function (t, i) {
-      return AN.txt('p' + i, [622, 132 + i * 30], t, {
+      // x 从 622 退到 596：最长那条「AB = AD，∠ABE = ∠ADG，BE = DG」在 622 处右缘到 903，被画布切掉 3px
+      return AN.txt('p' + i, [596, 132 + i * 30], t, {
         size: 16, anchor: 'start',
         color: i === lines.length - 1 ? COL.RED : COL.INK
       });
