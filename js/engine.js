@@ -32,12 +32,22 @@
 
   /* ---------- 图形生成 ---------- */
 
+  // 统一「从 from 到 to 逆时针走哪一端」：
+  // 旧版直接取 Math.abs(to-from) 当跨度，遇到跨 0° 的角（330° → 90°）会算出 240°，
+  // large-arc-flag 被置 1，画出一个绕远路的大圈——2026-11-11 手拉手模型里暴露。
+  // 现在一律：先算逆时针跨度，超过 180° 就掉头用另一侧的补角。
+  function arcSpan(from, to) {
+    var span = normDeg(to - from);
+    if (span > 180) return { from: to, to: from, span: 360 - span };
+    return { from: from, to: to, span: span };
+  }
+
   // 扇形路径：圆心 c，半径 r，从 from 到 to（逆时针）
   function sectorPath(c, r, from, to) {
-    var a = pt(c[0], c[1], r, from);
-    var b = pt(c[0], c[1], r, to);
-    var span = Math.abs(to - from);
-    var large = span > 180 ? 1 : 0;
+    var w = arcSpan(from, to);
+    var a = pt(c[0], c[1], r, w.from);
+    var b = pt(c[0], c[1], r, w.to);
+    var large = w.span > 180 ? 1 : 0;
     // SVG 中 y 向下，数学逆时针 = sweep-flag 0
     return 'M' + n(c[0]) + ',' + n(c[1]) +
       ' L' + n(a[0]) + ',' + n(a[1]) +
@@ -46,10 +56,10 @@
 
   // 弧线路径（不填充）
   function arcPath(c, r, from, to) {
-    var a = pt(c[0], c[1], r, from);
-    var b = pt(c[0], c[1], r, to);
-    var span = Math.abs(to - from);
-    var large = span > 180 ? 1 : 0;
+    var w = arcSpan(from, to);
+    var a = pt(c[0], c[1], r, w.from);
+    var b = pt(c[0], c[1], r, w.to);
+    var large = w.span > 180 ? 1 : 0;
     return 'M' + n(a[0]) + ',' + n(a[1]) +
       ' A' + n(r) + ',' + n(r) + ' 0 ' + large + ' 0 ' + n(b[0]) + ',' + n(b[1]);
   }
@@ -204,6 +214,9 @@
     }
     var g = mk('g');
     g.setAttribute('class', 'ml-el');
+    // 把讲稿里的 id 落到 DOM 上：验收脚本靠它取"页面上真实渲染出来的几何"，
+    // 而不是回头去读讲稿源码（读源码等于自己证明自己）。
+    if (spec.id) g.setAttribute('data-id', String(spec.id));
     var shape = buildShape(spec);
     paint(shape, spec);
     g.appendChild(shape);

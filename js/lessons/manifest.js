@@ -3,5 +3,6 @@ window.LESSON_FILES = [
   'triangle-angle-sum.js',
   'parallelogram-area.js',
   'perfect-square.js',
-  'viviani.js'
+  'viviani.js',
+  'handshake.js'
 ];
