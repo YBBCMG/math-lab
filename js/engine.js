@@ -130,13 +130,26 @@
       else s.strokeDasharray = '';
     }
 
-    if (spec.op != null) s.opacity = spec.op;
+    // 注意：透明度只在 <g> 上设一次（见 Stage.add / Stage.upd）。
+    // 这里若再设一次，两层会相乘：op=0.3 会被渲染成 0.09，整站发白。
+    // 历史 bug：2026-11-11 定位，症状是「所有色块都淡淡的、看不清楚」。
 
     if (spec.k === 'text') {
       s.fontSize = (spec.size || 16) + 'px';
       s.fontWeight = spec.weight || 600;
-      s.strokeWidth = '0';
       if (fill === 'none') s.fill = '#152034';
+      // 白色描边光晕：文字压在鲜艳色块上也要读得清。
+      // （配色变鲜艳之后，蓝底蓝字会糊成一片——用 paint-order 把描边压到填色后面）
+      if (spec.halo === false) {
+        s.stroke = 'none';
+        s.strokeWidth = '0';
+      } else {
+        s.stroke = '#ffffff';
+        s.strokeWidth = (spec.size >= 20 ? 4.5 : 3.5) + 'px';
+        s.strokeLinejoin = 'round';
+        s.strokeLinecap = 'round';
+        s.paintOrder = 'stroke';
+      }
     }
   }
 

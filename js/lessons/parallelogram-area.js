@@ -6,7 +6,7 @@
 (function () {
   var G = ML;
   var INK = '#16202f';
-  var BLUE = '#2563eb', ORNG = '#ef8b0c', GREEN = '#0f9d68';
+  var BLUE = '#0f5ef7', ORNG = '#f97316', GREEN = '#00a86b';
 
   /* 平行四边形：底 360，高 180 */
   var A = [200, 360];
@@ -19,7 +19,7 @@
   var HGT  = A[1] - D[1];      // 高 = 180
   var SHIFT = [B[0] - A[0], 0];  // 平移向量 = AB
 
-  var FILL_MAIN = '#e8efff';
+  var FILL_MAIN = '#d6e4ff';
 
   /* ---------- 两块（用两块拼成平行四边形，接缝就是高） ---------- */
 
@@ -68,7 +68,7 @@
     {
       say: '现在盯着左边这块直角三角形 ADE。',
       why: '面积不确定，就是因为它斜着。斜的东西不好算，正方形才好算。',
-      upd: [{ id: 'tn', fill: '#cfe0ff' }]
+      upd: [{ id: 'tn', fill: '#b9d3ff' }]
     },
     {
       say: '沿着高 DE 剪一刀——平行四边形被分成一个三角形和一个梯形。',
@@ -77,6 +77,7 @@
     },
     {
       say: '把这块三角形整体平移，补到右边缺的那一块上去。',
+      cite: '平移不改变图形的形状和大小（合同变换保面积）',
       why: '平移不改变形状和大小，所以面积还是原来的面积。',
       upd: [{ id: 'tn', move: SHIFT }]
     },
@@ -125,7 +126,7 @@
       say: '左边这块 △ABD：底是 AB = a，高是从 D 到底边的那一段 h。',
       why: '三角形的底和高是垂直的，所以高就是刚才画的那条垂线。',
       add: [
-        { id: 'triABD', k: 'poly', pts: [A, B, D], fill: BLUE, stroke: BLUE, sw: 2, op: 0.3 },
+        { id: 'triABD', k: 'poly', pts: [A, B, D], fill: BLUE, stroke: BLUE, sw: 2, op: 0.55 },
         { id: 'hHi', k: 'line', a: D, b: E, stroke: GREEN, sw: 3.5 },
         { id: 'lblA', k: 'text', at: [(A[0] + B[0]) / 2, A[1] + 34], text: '底 a', size: 17, fill: BLUE },
         { id: 'lblH', k: 'text', at: [D[0] - 30, (D[1] + E[1]) / 2], text: '高 h', size: 17, fill: GREEN }
@@ -136,7 +137,7 @@
       say: '右边这块 △BCD：底是 CD，也是 a；高是从 B 到 CD 的那一段，也是 h。',
       why: '两条平行线之间的距离处处相等，所以这条高和刚才那条一样长。',
       add: [
-        { id: 'triBCD', k: 'poly', pts: [B, C, D], fill: ORNG, stroke: ORNG, sw: 2, op: 0.45 },
+        { id: 'triBCD', k: 'poly', pts: [B, C, D], fill: ORNG, stroke: ORNG, sw: 2, op: 0.62 },
         { id: 'hHi2', k: 'line', a: [560, 180], b: [560, 360], stroke: GREEN, sw: 3.5 },
         { id: 'lblA2', k: 'text', at: [(C[0] + D[0]) / 2, 180 - 22], text: '底 a', size: 17, fill: ORNG },
         { id: 'lblH2', k: 'text', at: [596, 270], text: '高 h', size: 17, fill: GREEN }
@@ -145,16 +146,24 @@
     },
     {
       say: '不信？把左边这块绕对角线中点转半圈，看它能不能盖住右边。',
-      why: '平行四边形的两条对角线互相平分，所以中点正好是两者的公共中心。',
+      cite: '目测重合只是演示；真正的依据是全等',
+      why: '平行四边形的两条对角线互相平分，所以中点正好是两者的公共中心。转半圈是给你看的直观，下面给严格理由。',
       upd: [
         { id: 'triABD', rot: 180, origin: [450, 270], op: 0.6 }
       ]
     },
     {
-      say: '分毫不差地盖住了——所以这两个三角形一模一样大。',
-      why: '能完全重合的两个图形，面积一定相等。',
-      upd: [{ id: 'triABD', rot: 0, origin: [450, 270], op: 0.3 }],
-      eq: 'S△ABD = S△BCD'
+      say: '严格说：平行四边形的对边相等，所以 AB 等于 CD，AD 等于 BC；再加上公共边 BD，两个三角形三条边全相等。',
+      cite: '平行四边形对边相等（性质）+ SSS 全等判定',
+      why: '判定全等必须靠判定定理，不能靠“看着能盖上”。SSS 是三条边都对应相等，这是硬条件。',
+      upd: [{ id: 'triABD', rot: 0, origin: [450, 270], op: 0.55 }],
+      eq: '△ABD ≌ △CDB（SSS）'
+    },
+    {
+      say: '全等的两个三角形面积一定相等。于是各占一半。',
+      cite: '全等图形面积相等 + 面积可加性',
+      why: '这才是严格的那一步：面积相等来自“全等”，不来自“看起来一样大”。',
+      eq: 'S△ABD = S△CBD'
     },
     {
       say: '两块加起来，两个 1/2 正好凑成一个。',
@@ -179,8 +188,16 @@
     question: '一个平行四边形，底是 a，高是 h。它的面积为什么等于 a × h？',
     thumbStep: 3,
     methods: [
-      { name: '剪一刀拼长方形', sub: '切一切、移一移，秒变长方形', steps: m1 },
-      { name: '拆成两个三角形', sub: '用同底等高倒推', steps: m2 }
+      {
+        name: '剪一刀拼长方形', tier: 'proof',
+        sub: '证明 · 依据：分割不重叠 + 平移不改变面积',
+        steps: m1
+      },
+      {
+        name: '拆成两个三角形', tier: 'proof',
+        sub: '证明 · 依据：SSS 全等 + 面积可加',
+        steps: m2
+      }
     ]
   });
 })();

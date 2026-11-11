@@ -8,7 +8,7 @@
   var A = [150, 300], B = [710, 300], C = [400, 70];
   var R = 88;
 
-  var BLUE = '#2563eb', ORNG = '#ef8b0c', GREEN = '#0f9d68', INK = '#16202f';
+  var BLUE = '#0f5ef7', ORNG = '#f97316', GREEN = '#00a86b', INK = '#16202f';
 
   var wA = G.wedge(A, B, C);   // 顶点 A 处的内角
   var wB = G.wedge(B, C, A);   // 顶点 B 处的内角
@@ -17,7 +17,7 @@
   /* ---------- 复用件 ---------- */
 
   function tri() {
-    return { id: 'tri', k: 'poly', pts: [A, B, C], fill: '#eef2fb', stroke: INK, sw: 2.5 };
+    return { id: 'tri', k: 'poly', pts: [A, B, C], fill: '#d6e4ff', stroke: INK, sw: 2.5 };
   }
   function verts() {
     return [
@@ -54,9 +54,9 @@
       say: '先把三个内角标出来。这三片角，就是待会儿要被拿走的。',
       why: '角的大小只跟两条边张开的程度有关，边画长画短都不影响它。',
       add: [
-        wedgeSpec('wA', A, wA, BLUE, 0.3),
-        wedgeSpec('wB', B, wB, ORNG, 0.3),
-        wedgeSpec('wC', C, wC, GREEN, 0.3)
+        wedgeSpec('wA', A, wA, BLUE, 0.62),
+        wedgeSpec('wB', B, wB, ORNG, 0.62),
+        wedgeSpec('wC', C, wC, GREEN, 0.62)
       ]
     },
     {
@@ -73,8 +73,8 @@
       say: '沿着角的两条边剪开——三片角就离开了原来的三角形。',
       why: '因为「角度」不依赖外框，所以整片角可以原样搬到别处。',
       upd: [
-        { id: 'tri', op: 0.16 },
-        { id: 'wA', op: 0.72 }, { id: 'wB', op: 0.72 }, { id: 'wC', op: 0.72 },
+        { id: 'tri', op: 0.28 },
+        { id: 'wA', op: 0.8 }, { id: 'wB', op: 0.72 }, { id: 'wC', op: 0.72 },
         { id: 'lA', op: 0 }, { id: 'lB', op: 0 }, { id: 'lC', op: 0 }
       ]
     },
@@ -97,8 +97,9 @@
       ]
     },
     {
-      say: '看：三片角拼在一起，正好铺满直线的一侧。',
-      why: '它们的边两两重合，中间没有缝，也没有叠。',
+      say: '看：三片角拼在一起，看上去正好铺满直线的一侧。',
+      cite: '这是眼睛看到的，不是推理得到的',
+      why: '“中间没有缝、没有叠”是目测结论。放大一万倍，也未必看得出有没有 0.001° 的缝。',
       add: [{ id: 'base', k: 'line', a: [O[0] - R, O[1]], b: [O[0] + R, O[1]], stroke: INK, sw: 3 }]
     },
     {
@@ -108,15 +109,23 @@
       add: [{ id: 'l180', k: 'text', at: [O[0] + R + 58, O[1] - 4], text: '180°', size: 22, fill: INK }]
     },
     {
-      say: '所以，不管三角形长什么样，三个内角之和永远是 180°。',
-      why: '换一个三角形，撕角拼接的过程一模一样——结论也一模一样。',
-      eq: '∠A + ∠B + ∠C = 180°',
+      say: '拼上了，看起来严丝合缝。但请注意：这只是演示，还不是证明。',
+      cite: '演示 ≠ 证明',
+      why: '「看起来拼得上」靠的是眼睛，「一定拼得上」要靠推理。眼睛分辨不出那点缝隙和叠边。',
+      eq: '∠A + ∠B + ∠C = 180°（看起来）',
       add: [
         { id: 'lbA', k: 'text', at: G.pt(O[0], O[1], R + 26, wA.deg / 2), text: '∠A', size: 15, fill: BLUE },
         { id: 'lbB', k: 'text', at: G.pt(O[0], O[1], R + 26, wA.deg + wB.deg / 2), text: '∠B', size: 15, fill: ORNG },
         { id: 'lbC', k: 'text', at: G.pt(O[0], O[1], R + 26, wA.deg + wB.deg + wC.deg / 2), text: '∠C', size: 15, fill: GREEN }
       ],
-      hold: 2600
+      hold: 2800
+    },
+    {
+      say: '所以这一页只能让你相信，不能让你确认。真正的证明在方法二：只画一条平行线，不动剪刀。',
+      cite: '有限次拼接，无法保证对任意三角形都成立',
+      why: '把它排在第一是有意的：先建立直觉，再上证明。但顺序一旦被当成「这就是证明」，就变成误导了。',
+      add: [{ id: 'm1end', k: 'text', at: [400, 512], text: '本方法是演示，不是证明 →  请看方法二', size: 17, fill: '#e11d48', weight: 700 }],
+      hold: 3800
     }
   ];
 
@@ -134,6 +143,7 @@
     },
     {
       say: '过顶点 C，画一条和 AB 平行的直线 DE。',
+      cite: '平行公设：过直线外一点，有且只有一条直线与已知直线平行',
       why: '过直线外一点，有且只有一条直线与已知直线平行——所以这条线是唯一确定的。',
       add: [
         { id: 'lDE', k: 'line', a: D2, b: E2, stroke: INK, sw: 2, dash: [7, 6] },
@@ -146,9 +156,9 @@
       why: '把这几个角先认清楚，等会儿才好在 C 点把它们对号入座。',
       eq: '∠A + ∠B + ∠ACB = ?',
       add: [
-        wedgeSpec('wA', A, wA, BLUE, 0.3),
-        wedgeSpec('wB', B, wB, ORNG, 0.3),
-        wedgeSpec('wC', C, wC, GREEN, 0.3),
+        wedgeSpec('wA', A, wA, BLUE, 0.62),
+        wedgeSpec('wB', B, wB, ORNG, 0.62),
+        wedgeSpec('wC', C, wC, GREEN, 0.62),
         { id: 'lA', k: 'text', at: labelAt(A, wA, 0.62), text: degText(wA), size: 16, fill: BLUE },
         { id: 'lB', k: 'text', at: labelAt(B, wB, 0.62), text: degText(wB), size: 16, fill: ORNG },
         { id: 'lC', k: 'text', at: labelAt(C, wC, 0.62), text: degText(wC), size: 16, fill: GREEN }
@@ -156,9 +166,10 @@
     },
     {
       say: '注意截线的左边：∠DCA 和 ∠A 是一对内错角。',
-      why: '两直线平行，内错角相等——这是平行线的性质。',
+      cite: '平行线性质：两直线平行，内错角相等',
+      why: '两直线平行，内错角相等——这是平行线的性质，也是整个证明唯一用到的定理。',
       add: [
-        { id: 'wDA', k: 'sector', c: C, r: R, from: 180, to: wC.from, fill: BLUE, stroke: BLUE, sw: 1.5, op: 0.45 },
+        { id: 'wDA', k: 'sector', c: C, r: R, from: 180, to: wC.from, fill: BLUE, stroke: BLUE, sw: 1.5, op: 0.72 },
         { id: 'lDA', k: 'text', at: G.pt(C[0], C[1], R * 0.66, (180 + wC.from) / 2), text: degText(wA), size: 15, fill: BLUE }
       ]
     },
@@ -167,7 +178,7 @@
       why: '一左一右是同一套理由：两条平行线被同一条截线所截，内错角必相等。',
       eq: '∠DCA = ∠A,  ∠BCE = ∠B',
       add: [
-        { id: 'wBE', k: 'sector', c: C, r: R, from: wC.to, to: 360, fill: ORNG, stroke: ORNG, sw: 1.5, op: 0.45 },
+        { id: 'wBE', k: 'sector', c: C, r: R, from: wC.to, to: 360, fill: ORNG, stroke: ORNG, sw: 1.5, op: 0.72 },
         { id: 'lBE', k: 'text', at: G.pt(C[0], C[1], R * 0.66, (wC.to + 360) / 2), text: degText(wB), size: 15, fill: ORNG }
       ]
     },
@@ -201,7 +212,8 @@
   var m3 = [
     {
       say: '第三条路，只用一个外角就够了。',
-      why: '外角是「三角形外面的那个角」，它天然等于两个不相邻内角之和。',
+      cite: '外角定理：三角形的一个外角 = 与它不相邻的两个内角之和',
+      why: '注意：外角定理本身也是用平行线证出来的，所以这条路建立在方法二之上，不是独立的一条。',
       add: [tri()].concat(verts())
     },
     {
@@ -210,7 +222,7 @@
       add: [
         { id: 'lBD', k: 'line', a: B, b: D3, stroke: INK, sw: 2, dash: [7, 6] },
         { id: 'nD', k: 'text', at: [D3[0] + 6, D3[1] + 26], text: 'D', size: 20, fill: INK },
-        { id: 'wExt', k: 'sector', c: B, r: R, from: 0, to: wB.from, fill: '#fdeaea', stroke: '#e04545', sw: 2, op: 0.5 }
+        { id: 'wExt', k: 'sector', c: B, r: R, from: 0, to: wB.from, fill: '#ffd6d6', stroke: '#e11d48', sw: 2, op: 0.72 }
       ]
     },
     {
@@ -218,9 +230,9 @@
       why: '待会儿要被搬走的，就是其中两片；第三片留在原地不动。',
       eq: '∠A + ∠B + ∠ACB = ?',
       add: [
-        wedgeSpec('wA', A, wA, BLUE, 0.3),
-        wedgeSpec('wB', B, wB, ORNG, 0.3),
-        wedgeSpec('wC', C, wC, GREEN, 0.3),
+        wedgeSpec('wA', A, wA, BLUE, 0.62),
+        wedgeSpec('wB', B, wB, ORNG, 0.62),
+        wedgeSpec('wC', C, wC, GREEN, 0.62),
         { id: 'lA', k: 'text', at: labelAt(A, wA, 0.6), text: degText(wA), size: 16, fill: BLUE },
         { id: 'lB', k: 'text', at: labelAt(B, wB, 0.6), text: degText(wB), size: 16, fill: ORNG },
         { id: 'lC', k: 'text', at: labelAt(C, wC, 0.6), text: degText(wC), size: 16, fill: GREEN }
@@ -263,10 +275,11 @@
       hold: 2400
     },
     {
-      say: '三条路，同一个结论。',
-      why: '撕角拼、画平行线、用外角——本质上都是在数「一个平角」。',
+      say: '三条路走完了，但它们的地位并不相同：只有方法二是一条完整的证明，方法一是演示，方法三是它的推论。',
+      cite: '分类：演示 / 证明 / 推论',
+      why: '搞清楚这一点，比记住“内角和 180°”更重要——因为考试考的是“为什么”，不是“是多少”。',
       eq: '∠A + ∠B + ∠C = 180°',
-      hold: 3200
+      hold: 4000
     }
   ];
 
@@ -282,9 +295,23 @@
     question: '任意一个三角形，它的三个内角加起来是多少度？为什么？',
     thumbStep: 2,
     methods: [
-      { name: '撕角拼平角', sub: '最直观：把三个角真的拿出来拼', steps: m1 },
-      { name: '作平行线看内错角', sub: '不用撕，只加一条辅助线', steps: m2 },
-      { name: '外角定理', sub: '把 ∠A、∠C 搬进外角里', steps: m3 }
+      {
+        name: '撕角拼平角', tier: 'demo',
+        sub: '直观演示 · 看着像，还不是证明',
+        steps: m1
+      },
+      {
+        name: '作平行线看内错角', tier: 'proof',
+        sub: '严格证明 · 只用了平行线性质',
+        steps: m2
+      },
+      {
+        name: '外角定理', tier: 'corollary',
+        sub: '推论 · 前提：外角定理已成立',
+        needs: '作平行线看内错角',
+        needsMsg: '外角定理本身也是用平行线证出来的（过顶点作平行线，再用内错角）。这里搬角片只是让你看清它为什么成立；严格链条是：平行线性质 → 外角定理 → 内角和。',
+        steps: m3
+      }
     ]
   });
 })();

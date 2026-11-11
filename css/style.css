@@ -300,3 +300,50 @@ button { font-family: inherit; cursor: pointer; }
   .topbar, .controls, .side { display: none; }
   .lesson { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   2026-11-11 新增：严谨分档（演示 / 证明 / 推论）+ 依据 + 配音
+   ============================================================ */
+
+/* 方法名 + 三档标签 */
+.methods button .body { display: block; min-width: 0; }
+.methods button .nm {
+  display: block; font-size: 15px; font-weight: 600; line-height: 1.4;
+}
+.methods button .tier {
+  display: inline-block; margin-left: 8px; vertical-align: 1px;
+  font-size: 11px; font-weight: 700; font-style: normal;
+  letter-spacing: .5px; padding: 1px 7px; border-radius: 20px;
+  border: 1px solid transparent; white-space: nowrap;
+}
+.tier.demo      { background: #fff2dd; color: #9a5b05; border-color: #f0d5a4; }
+.tier.proof     { background: #dcf7e8; color: #067048; border-color: #a9e4c8; }
+.tier.corollary { background: #e4edff; color: #0b47b8; border-color: #b8cfff; }
+
+/* 前置说明：推论要说清依赖谁，演示要说清它不算证明 */
+.needs {
+  margin: 12px 14px 14px; padding: 11px 13px;
+  font-size: 12.5px; line-height: 1.65; color: #7a4a06;
+  background: #fff7e6; border-left: 3px solid #f97316;
+  border-radius: 0 8px 8px 0;
+}
+
+/* 依据：证明里每一步真正用到的那条定理 */
+.caption .cite {
+  display: block; margin-top: 9px;
+  font-size: 14px; font-weight: 600; line-height: 1.5;
+  color: #0b47b8; background: #e8f0ff;
+  border-left: 3px solid #0f5ef7; border-radius: 0 6px 6px 0;
+  padding: 5px 11px;
+}
+.caption .cite::before {
+  content: "依据"; display: inline-block;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: #fff; background: #0f5ef7;
+  padding: 1px 6px; border-radius: 4px;
+  margin-right: 8px; vertical-align: 1px;
+}
+
+/* 配音按钮的开关态 */
+.btn.on { background: var(--blue-bg); border-color: #b8cfff; color: #0b47b8; }
+
