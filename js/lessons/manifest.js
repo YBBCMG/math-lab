@@ -5,5 +5,8 @@ window.LESSON_FILES = [
   'perfect-square.js',
   'viviani.js',
   'handshake.js',
-  'equilateral-altitude.js'
+  'equilateral-altitude.js',
+  'line-three-angle.js',
+  'double-median.js',
+  'half-angle.js'
 ];
