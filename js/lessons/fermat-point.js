@@ -35,8 +35,10 @@
   // 数学角正向（屏幕上是视觉逆时针）
   function rot(P0, O0, deg) {
     var d = sub(P0, O0), t = deg * Math.PI / 180;
-    return [ML.round1(O0[0] + d[0] * Math.cos(t) + d[1] * Math.sin(t)),
-            ML.round1(O0[1] - d[0] * Math.sin(t) + d[1] * Math.cos(t))];
+    // 保留 3 位小数：C′ 只有 1 位小数时，BC′ 与 PA+PB+PC 会比出 0.047 的假差额
+    var r3 = function (v) { return Math.round(v * 1000) / 1000; };
+    return [r3(O0[0] + d[0] * Math.cos(t) + d[1] * Math.sin(t)),
+            r3(O0[1] - d[0] * Math.sin(t) + d[1] * Math.cos(t))];
   }
   var Pp = rot(P, A, 60), Cp = rot(C, A, 60);      // 绕 A：P→(491.2,226.0)  C→(710.5,82.2)
   var Ap = rot(A, B, 60), Ppp = rot(P, B, 60);     // 绕 B：A→(73.5,114.5)   P→(164.7,160.4)
