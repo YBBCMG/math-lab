@@ -35,7 +35,9 @@
   function rayHitBC(deg) {                         // 从 A 沿数学角 deg 出发的射线 ∩ 直线 BC
     var d = ML.pt(A[0], A[1], 1, deg);
     var t = (B[1] - A[1]) / (d[1] - A[1]);
-    return [ML.round1(A[0] + t * (d[0] - A[0])), B[1]];
+    // 保留 3 位小数，不能只用 round1：BD、CE、DE 都由这两个点相减得到，
+    // 1 位小数的舍入会把 BD² + CE² = DE² 的数值差放大到 16（3 位时只差 0.2）
+    return [Math.round((A[0] + t * (d[0] - A[0])) * 1000) / 1000, B[1]];
   }
   var aAB = ML.angOf(A, B);                        // 225°
   var D = rayHitBC(aAB + ALPHA);                   // (319.4, 400)
