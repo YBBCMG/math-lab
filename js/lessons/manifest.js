@@ -11,5 +11,8 @@ window.LESSON_FILES = [
   'half-angle.js',
   'cut-supplement.js',
   'exam-26-1.js',
-  'exam-26-2.js'
+  'exam-26-2.js',
+  'angle-bisector-cut.js',
+  'hypotenuse-median.js',
+  'handshake-right.js'
 ];
