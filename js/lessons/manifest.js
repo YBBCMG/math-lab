@@ -14,5 +14,7 @@ window.LESSON_FILES = [
   'exam-26-2.js',
   'angle-bisector-cut.js',
   'hypotenuse-median.js',
-  'handshake-right.js'
+  'handshake-right.js',
+  'half-angle-square.js',
+  'fermat-point.js'
 ];

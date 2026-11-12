@@ -137,7 +137,7 @@
       cite: 'AAS：两角及其中一角的对边对应相等的两个三角形全等',
       delNow: LED_IDS,
       add: [fABD, fCAE].concat(led(['∠ABD = ∠2，∠ADB = ∠CEA = 90°，AB = CA', '⟹ △ABD ≌ △CAE（AAS）'])),
-      front: ['segBD', 'segCE', 'raD', 'raE', 'raA', 'ang3', 'ang3t', 'l1', 'segAD' ],
+      front: ['segBD', 'segCE', 'raD', 'raE', 'raA', 'ang3', 'ang3t', 'l1', 'segAD'],
       eq: '△ABD ≌ △CAE（AAS）'
     },
     {
@@ -145,7 +145,8 @@
       cite: '全等三角形对应边相等',
       delNow: LED_IDS,
       add: [hAD, hCE, hBD, hAE].concat(legend, led(['△ABD ≌ △CAE', '⟹ AD = CE，BD = AE'])),
-      front: ['segBD', 'segCE', 'raD', 'raE'],
+      // 粗线排在细线之后：否则 segBD/segCE 的深色细线会从粗线中间穿出来
+      front: ['segBD', 'segCE', 'raD', 'raE', 'hAD', 'hCE', 'hBD', 'hAE'],
       eq: 'AD = CE，BD = AE'
     },
     {

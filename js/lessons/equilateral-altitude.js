@@ -169,7 +169,9 @@
       cite: 'CG ⊥ AB ⟹ ∠AGC = ∠BGC = 90°',
       delNow: ['warnTxt'],
       add: [triAGC, triBGC, sep, nameAGC, nameBGC],
-      front: ['alt', 'ra', 'lbG', 'lbH', 'vC'],
+      // sep 是白色遮罩线（盖住原来的边，做出「撕下来」的效果），必须排在 alt 之后置顶，
+      // 否则红色虚线 alt 会穿出遮罩，白色挡不住
+      front: ['alt', 'ra', 'lbG', 'lbH', 'vC', 'sep'],
       eq: '∠AGC = ∠BGC = 90°'
     },
 

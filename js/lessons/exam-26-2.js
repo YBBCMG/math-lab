@@ -119,8 +119,11 @@
   var fCGA = { id: 'vfCGA', k: 'poly', pts: [Cp, Gp, Ap], fill: AN.wash('15,157,88', 0.15), stroke: 'none' };
   var fABC = { id: 'vfABC', k: 'poly', pts: [Ap, Bp, Cp], fill: AN.wash('15,157,88', 0.15), stroke: 'none' };
 
+  // 粗高亮线必须排在数组末尾：front 按顺序 appendChild，细线排在后面会被顶到粗线之上，
+  // 2.4px 的深色线就会从 6.5px 粗线正中间露出来（_overlap.mjs 实测的脏线根因）。
   var lift1 = ['vsAB', 'vsBC', 'vsCA', 'vsAF', 'vsCF', 'vsAG',
-               'vaB', 'vaC', 'vaCGA', 'vaCAG', 'vaAGF', 'vaGAF', 'vaAFG'];
+               'vaB', 'vaC', 'vaCGA', 'vaCAG', 'vaAGF', 'vaGAF', 'vaAFG',
+               'vhlCF'];
 
   var steps1 = [
     {
@@ -225,7 +228,8 @@
   var fCAF = { id: 'wfCAF', k: 'poly', pts: [Cp, Ap, Fp], fill: AN.wash('37,99,235', 0.14), stroke: 'none' };
 
   var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM', 'wsCT',
-               'waB', 'waC', 'waCBM', 'waBCM', 'waBMC', 'waACM', 'waCAF'];
+               'waB', 'waC', 'waCBM', 'waBCM', 'waBMC', 'waACM', 'waCAF',
+               'whlAT'];
 
   var steps2 = [
     {
@@ -243,7 +247,7 @@
       add: [sBM, sCT, nMB, nBhalo, tkBM, tkBC2, heavy('whlAT', Ap, Mp, COL.RED)]
         .concat(led2(['补短：延长 AB 到 T，BT = BC', '只要再证 AT = CF'])),
       front: ['wsAB', 'wsBC', 'wsCA', 'wsAF', 'wsCF', 'wsBM', 'wsCT',
-              'waB', 'waC'],
+              'waB', 'waC', 'whlAT'],
       eq: 'AT = AB + BC'
     },
     {
@@ -346,7 +350,8 @@
 
   var lift3 = ['xsAB', 'xsBC', 'xsCA', 'xsAF', 'xsCF', 'xsBT', 'xsTF', 'xsBF',
                'xaB', 'xaC', 'xaBAF', 'xaCAF', 'xaAFB', 'xaAFC', 'xaBFT',
-               'xaCFB', 'xaCFT', 'xaCTF', 'xaCBF'];
+               'xaCFB', 'xaCFT', 'xaCTF', 'xaCBF',
+               'xhlCT'];
 
   var LD3 = ['xled0', 'xled1', 'xled2', 'xled3', 'xled4'];
   var led3 = ledger('x');

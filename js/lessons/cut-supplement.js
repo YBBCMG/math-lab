@@ -127,8 +127,10 @@
 
   var nE = AN.txt('vnE', [Ep[0] + 26, Ep[1] - 14], 'E', { size: FS.V, weight: 700 });
 
+  // 粗高亮线放末尾（front 顺序 = 叠放顺序），否则细线会从粗线中间露出来
   var lift1 = ['vsAB', 'vsBC', 'vsCA', 'vsAD', 'vsE',
-               'vaC', 'vaB', 'vbis1', 'vbis2', 'vaAED', 'vaEDC'];
+               'vaC', 'vaB', 'vbis1', 'vbis2', 'vaAED', 'vaEDC',
+               'vhlAC', 'vhlAE', 'vhlEC'];
 
   var steps1 = [
     {
@@ -229,7 +231,8 @@
   var nF2 = AN.txt('wF', [F2[0] - 18, F2[1] + 8], 'F', { size: FS.V, weight: 700, anchor: 'end' });
 
   var lift2 = ['wsAB', 'wsBC', 'wsCA', 'wsAD', 'wsBF', 'wsDF',
-               'waC', 'waB', 'wbis1', 'wbis2', 'waLinB', 'waBFD', 'waBDF'];
+               'waC', 'waB', 'wbis1', 'wbis2', 'waLinB', 'waBFD', 'waBDF',
+               'whlAF'];
 
   var steps2 = [
     {
@@ -333,7 +336,8 @@
   var nF3 = AN.vname('xF', F3, O);
 
   var lift3 = ['xsAB', 'xsBC', 'xsCA', 'xsAD', 'xsBF', 'xsAF',
-               'xaC', 'xaB', 'xbis1', 'xbis2', 'xaLinB', 'xaBAF', 'xaBFA', 'xaADF', 'xaDAF'];
+               'xaC', 'xaB', 'xbis1', 'xbis2', 'xaLinB', 'xaBAF', 'xaBFA', 'xaADF', 'xaDAF',
+               'xhlDF', 'xhlAC', 'xhlAF'];
 
   var steps3 = [
     {

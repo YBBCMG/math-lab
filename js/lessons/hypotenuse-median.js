@@ -72,7 +72,8 @@
     e.nD = AN.txt(p + 'D', [D[0] + 46, D[1] - 4], 'D', { size: FS.V, weight: 700, halo: true });
 
     // 直角符号：从 C 沿「朝 A」「朝 B」两个方向各走 14
-    e.rt = AN.right(p + 'rtC', C, A, B, 14, COL.INK);
+    // AN.right 的第 3、4 个参数是「方向向量」，不是端点坐标 —— 传点会按原点算方向，方角歪掉
+    e.rt = AN.right(p + 'rtC', C, sub(A, C), sub(B, C), 14, COL.INK);
     return e;
   }
 
@@ -127,7 +128,9 @@
       delNow: LD1,
       add: [heavy('vhlAB', A, B, COL.ORANGE), heavy('vhlFC', F, C, COL.ORANGE)]
         .concat(led1(['四边形 AFBC 的对角线：AB 与 FC', '两条对角线交于 D'])),
-      front: lift1,
+      // 粗线必须排在细线之后置顶：front 是按数组顺序 appendChild，
+      // 若细线在后面被顶上去，2.4px 的深色细线会从 6.5px 粗线正中间露出来，看着像一条脏线
+      front: lift1.concat(['vhlAB', 'vhlFC']),
       eq: '对角线 AB 与 FC 交于 D'
     },
     {
@@ -160,7 +163,7 @@
       delNow: LD1,
       add: [heavy('vhlCF', C, F, COL.RED), heavy('vhlAB2', A, B, COL.RED)]
         .concat(led1(['CF = AB（矩形对角线相等）', 'CD = CF/2 = AB/2'])),
-      front: lift1,
+      front: lift1.concat(['vhlCF', 'vhlAB2']),
       eq: 'CD = AB/2',
       hold: 4200
     }
@@ -175,7 +178,7 @@
   var sDE = line('wsDE', D, E);
   var tkAE = AN.tick('wtkAE', A, E, COL.GREEN);
   var tkEC = AN.tick('wtkEC', E, C, COL.GREEN);
-  var rtE = AN.right('wrtE', E, A, D, 14, COL.TEAL);
+  var rtE = AN.right('wrtE', E, sub(A, E), sub(D, E), 14, COL.TEAL);
 
   var tkDA = AN.tick('wtkDA', A, D, COL.PURPLE);
   var tkDC = AN.tick('wtkDC', C, D, COL.PURPLE);
@@ -206,7 +209,7 @@
       delNow: LD2,
       add: [heavy('whlDE', D, E, COL.TEAL), heavy('whlBC', B, C, COL.TEAL)]
         .concat(led2(['DE 是中位线 ⟹ DE ∥ BC，DE = BC/2'])),
-      front: lift2,
+      front: lift2.concat(['whlDE', 'whlBC']),
       eq: 'DE ∥ BC，DE = BC/2'
     },
     {
@@ -223,7 +226,7 @@
       cite: '垂直平分线：过线段中点且垂直于该线段的直线',
       delNow: LD2,
       add: [heavy('whlPerp', D, E, COL.BLUE)].concat(led2(['DE 过 AC 中点 E，且 DE ⊥ AC', '⟹ DE 是 AC 的垂直平分线'])),
-      front: lift2,
+      front: lift2.concat(['whlPerp']),
       eq: 'DE 是 AC 的垂直平分线'
     },
     {
@@ -240,7 +243,7 @@
       delNow: LD2,
       add: [heavy('whlCD', C, D, COL.RED), heavy('whlAB', A, B, COL.RED)]
         .concat(led2(['DA = AB/2（D 是中点）', 'CD = DA = AB/2'])),
-      front: lift2,
+      front: lift2.concat(['whlCD', 'whlAB']),
       eq: 'CD = AB/2',
       hold: 4200
     }

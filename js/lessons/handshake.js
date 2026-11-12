@@ -336,7 +336,7 @@
     {
       say: '设 BD 与 CE 交于点 P。要回答的，就是三角形 P 处的那个角。',
       cite: '记 BD 与 CE 的交点为 P',
-      why: '注意：必须先确认它们真的相交。BD 和 CE 的方向不同（一个近乎水平、一个很陡），所以一定交于一点。',
+      why: '注意：必须先确认它们真的相交。BD 和 CE 的夹角是 60°，两条直线不平行，所以一定交于一点。',
       add: [dotP, labP],
       eq: '求 ∠BPC（或它的对顶角 ∠E P D）'
     },
@@ -430,7 +430,9 @@
   var mvTri = { id: 'mvTri', k: 'poly', pts: [A, B, D], fill: GREEN, stroke: GREEN, sw: 3.5, op: 0.28, origin: A };
   // 绿色 BD 要比 CE（橙，sw 5）细一档：转过去之后橙色从两边露出来，
   // 才能看出「绿线正好落在橙线上」，否则整条盖死，读者只看到一条绿线。
-  var mvBD = { id: 'mvBD', k: 'line', a: B, b: D, stroke: GREEN, sw: 3.2, origin: A };
+  // 加 dash：旋转前 mvBD 与 BD 完全重合，实线绿细线压在蓝粗线中间会看成「画脏了」；
+  // 改成绿色虚线后是一条看得懂的「标记线」，旋转后仍比 CE 细，橙色照样从两边露出来。
+  var mvBD = { id: 'mvBD', k: 'line', a: B, b: D, stroke: GREEN, sw: 3.2, dash: [9, 6], origin: A };
 
   // 旋转到位后，在交点 P 处标出 BD 与 CE 的夹角（也就是旋转角）
   var arcP60 = arcAt('aP60', P, B, C, 44, RED, 4);

@@ -92,8 +92,9 @@
     e.nE = AN.vname(p + 'E', E, O);
 
     // 两个直角都在 A，一个朝上右、一个朝下，方角不重叠
-    e.rt1 = AN.right(p + 'rt1', A, B, C, 14, COL.BLUE);
-    e.rt2 = AN.right(p + 'rt2', A, D, E, 14, COL.ORANGE);
+    // AN.right 的第 3、4 个参数是「从顶点出发的方向向量」，不是端点坐标
+    e.rt1 = AN.right(p + 'rt1', A, sub(B, A), sub(C, A), 14, COL.BLUE);
+    e.rt2 = AN.right(p + 'rt2', A, sub(D, A), sub(E, A), 14, COL.ORANGE);
     return e;
   }
 
@@ -115,7 +116,7 @@
   // 改成「两个 90° 方角 + 同一个公共角 ∠CAD」——读者一眼能看出
   // 两个大角 = 各自的直角 + 同一个角，逻辑照样成立，图却干净。
   var aCAD = AN.angle('vaCAD', A, C, D, 32, COL.TEAL);
-  var rtP = AN.right('vrtP', P, B, C, 11, COL.RED);
+  var rtP = AN.right('vrtP', P, sub(B, P), sub(C, P), 11, COL.RED);
 
   var fBAD = poly('vfBAD', [B, A, D], '15,157,88', 0.16);
   var fCAE = poly('vfCAE', [C, A, E], '15,157,88', 0.16);
@@ -126,7 +127,9 @@
 
   var steps1 = [
     {
-      say: '△ABC 和 △ADE 都是等腰直角三角形，公共顶点是 A。B 处这个方角是 ∠BAC 的直角记号，A 下面那个方角是 ∠DAE 的直角。连上 BD 和 CE，要证它们一样长，而且互相垂直。',
+      // 两个方角都画在顶点 A：一个在 A 的右上（夹在 AB 与 AC 之间），一个在 A 的正下（夹在 AD 与 AE 之间）。
+      // 早先这句写成「B 处这个方角」，与图上位置不符 —— 直角记号永远标在角的顶点。
+      say: '△ABC 和 △ADE 都是等腰直角三角形，公共顶点是 A。A 右上这个方角标的是 ∠BAC，正下方那个方角标的是 ∠DAE。连上 BD 和 CE，要证它们一样长，而且互相垂直。',
       cite: '题设：AB = AC，AD = AE，∠BAC = ∠DAE = 90°',
       add: [f1.t1, f1.t2, f1.sAB, f1.sAC, f1.sBC, f1.sAD, f1.sAE, f1.sDE,
             f1.rt1, f1.rt2, f1.nA, f1.nB, f1.nC, f1.nD, f1.nE]
@@ -210,7 +213,7 @@
       delNow: LD1,
       add: [heavy('vhlBD', B, D, COL.RED), heavy('vhlCE', C, E, COL.RED)]
         .concat(led1(['BD = CE，且 ∠BPC = 90°', 'BD = CE 且 BD ⊥ CE'])),
-      front: lift1,
+      front: lift1.concat(['vhlBD', 'vhlCE']),
       eq: 'BD = CE 且 BD ⊥ CE',
       hold: 4200
     }
@@ -226,7 +229,7 @@
   var tkAD2 = AN.tick('wtkAD', A, D, COL.ORANGE, 9, 30);
   var tkAE2 = AN.tick('wtkAE', A, E, COL.ORANGE, 9, 30);
 
-  var rtP2 = AN.right('wrtP', P, B, C, 11, COL.RED);
+  var rtP2 = AN.right('wrtP', P, sub(B, P), sub(C, P), 11, COL.RED);
   var lift2 = ['wsAB', 'wsAC', 'wsBC', 'wsAD', 'wsAE', 'wsDE', 'wsBD', 'wsCE',
                'wtkAB', 'wtkAC', 'wtkAD', 'wtkAE', 'wrt1', 'wrt2', 'wrtP'];
 
@@ -302,7 +305,7 @@
       delNow: LD2,
       add: [heavy('whlBD2', B, D, COL.RED), heavy('whlCE2', C, E, COL.BLUE)]
         .concat(led2(['BD = CE，∠BPC = 90°', 'BD = CE 且 BD ⊥ CE'])),
-      front: lift2,
+      front: lift2.concat(['whlBD2', 'whlCE2']),
       eq: 'BD = CE 且 BD ⊥ CE',
       hold: 4200
     }
