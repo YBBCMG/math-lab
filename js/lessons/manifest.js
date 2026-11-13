@@ -16,5 +16,7 @@ window.LESSON_FILES = [
   'hypotenuse-median.js',
   'handshake-right.js',
   'half-angle-square.js',
-  'fermat-point.js'
+  'fermat-point.js',
+  'midline-theorem.js',
+  'median-third.js'
 ];
