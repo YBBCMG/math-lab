@@ -21,5 +21,6 @@ window.LESSON_FILES = [
   'median-third.js',
   'general-horse.js',
   'apollonius-circle.js',
-  'guadou-principle.js'
+  'guadou-principle.js',
+  'apex120-perimeter.js'
 ];
