@@ -20,5 +20,6 @@ window.LESSON_FILES = [
   'midline-theorem.js',
   'median-third.js',
   'general-horse.js',
-  'apollonius-circle.js'
+  'apollonius-circle.js',
+  'guadou-principle.js'
 ];
