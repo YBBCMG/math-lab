@@ -81,7 +81,10 @@
       q: dot(p1 + 'q' + tag, Q, COL.PURPLE, 4.6),
       qa: line(p1 + 'qa' + tag, Q, A, COL.RED, 2.4),
       qb: line(p1 + 'qb' + tag, Q, B, COL.RED, 2.4),
-      qn: AN.txt(p1 + 'qn' + tag, [Q[0], Q[1] + 30], 'P' + tag, { size: FS.NOTE, color: COL.PURPLE, weight: 700 })
+      // 标签用下标（P₁ P₂ P₃），跟站里其它题一致
+      qn: AN.txt(p1 + 'qn' + tag, [Q[0], Q[1] + 30],
+        'P' + ({ '1': '₁', '2': '₂', '3': '₃' }[tag] || ''),
+        { size: FS.NOTE, color: COL.PURPLE, weight: 700 })
     };
   }
   var T1 = trial('1', [300, 330]);
@@ -98,8 +101,11 @@
     {
       say: '一条直线上，要找一个点 P，让它到 A 和到 B 的距离加起来最小。这条线就叫 l，A 和 B 都在这条线的一侧 —— 这就是「将军饮马」：将军从 A 出发，到河边饮马，再回 B，走哪条路最短。',
       cite: '题设：A、B 在直线 l 同侧，P 在 l 上，求 PA + PB 最小',
+      // 账本：全方法统一 2 行。行数一变，多出来的那行会一直是上一步的旧文字
+      // （引擎按 id 覆盖添加，不会自动清掉多的行）—— 第一版这里写了 3 行，
+      // 结果第 2 步起第 3 行永远停在「求 PA + PB 的最小值」。
       add: [L1, cA1, cB1, nA1, nB1].concat(sb1)
-        .concat(led(p1)(['A、B 在 l 同侧', 'P 在 l 上动', '求 PA + PB 的最小值'], 452)),
+        .concat(led(p1)(['A、B 在 l 同侧，P 在 l 上动', '求 PA + PB 的最小值'], 452)),
       eq: '求 min(PA + PB)'
     },
     {
