@@ -18,5 +18,7 @@ window.LESSON_FILES = [
   'half-angle-square.js',
   'fermat-point.js',
   'midline-theorem.js',
-  'median-third.js'
+  'median-third.js',
+  'general-horse.js',
+  'apollonius-circle.js'
 ];
