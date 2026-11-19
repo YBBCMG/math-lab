@@ -122,8 +122,8 @@
 
   var vd0 = dot('vP0', P0, COL.PURPLE, 4.4), vq0 = dot('vQ0', Q0, COL.ORANGE, 5);
   var vdq0 = heavy('vdq0', D, Q0, COL.RED, 4.4), vaq0 = heavy('vaq0', Q0, A, COL.RED, 4.4);
-  var vnQ0 = AN.txt('vnQ0', [Q0[0] - 42, Q0[1] + 2], 'Q₀', { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: true  });
-  var vnP0 = AN.txt('vnP0', [P0[0] - 26, P0[1] + 6], 'P₀', { size: FS.NOTE, color: COL.PURPLE, weight: 700, halo: true  });
+  var vnQ0 = AN.txt('vnQ0', [Q0[0] - 42, Q0[1] + 2], 'Q₀', { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: false });
+  var vnP0 = AN.txt('vnP0', [P0[0] - 26, P0[1] + 6], 'P₀', { size: FS.NOTE, color: COL.PURPLE, weight: 700, halo: false });
 
   var SB1 = scaleBar('v');
 
@@ -224,7 +224,7 @@
   var wnD = AN.txt('wnD', [319, 259], 'D', { size: FS.V, color: COL.TEAL, weight: 700, halo: false });
   var wnDp = AN.txt('wnDp', [507, 232], "D′", { size: FS.NOTE, color: COL.TEAL, weight: 700, halo: false });
   var wnAp = AN.txt('wnAp', [592, 124], "A″", { size: FS.V, color: COL.GREEN, weight: 700, halo: false });
-  var wnQ0 = AN.txt('wnQ0', [Q0[0] - 42, Q0[1] + 2], 'Q₀', { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: true  });
+  var wnQ0 = AN.txt('wnQ0', [Q0[0] - 42, Q0[1] + 2], 'Q₀', { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: false });
   var wltT = AN.txt('wltT', on(Dp, K2, 214), "l′", { size: FS.SIDE, color: COL.TEAL, weight: 700, halo: true });
 
   var wB1 = dot('wB1', B, COL.INK);
