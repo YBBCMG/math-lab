@@ -322,6 +322,84 @@
     }
   ];
 
+  /* ---------- 拖动探索（只在演示档开） ----------
+     讲完之后把 P 交到手上：拖它，Q 跟着在 l′ 上滑，CQ 的长度实时读数。
+     拖到 Q 正好落在垂足 T 的那一刻，读数压到 8.00 —— 最小值是能「玩」出来的，
+     不是被告知的。这就是这个方法存在的意义。 */
+
+  // 轨迹点 → path 的 d（点太多时只隔点取，省 DOM 开销）
+  function trailPath(pts) {
+    if (!pts || !pts.length) return 'M0,0';
+    var step = pts.length > 260 ? 2 : 1;
+    var d = 'M' + AN.nf(pts[0][0]) + ',' + AN.nf(pts[0][1]);
+    for (var i = step; i < pts.length; i += step) {
+      d += ' L' + AN.nf(pts[i][0]) + ',' + AN.nf(pts[i][1]);
+    }
+    return d;
+  }
+
+  var DRAG_RAIL = { a: [250, LY], b: [600, LY] };   // Q 走到端点时刚好还在画内
+
+  var drag1 = {
+    handle: 'vP1',
+    rail: DRAG_RAIL,
+    start: P1,
+    hint: '拖动紫色点 P，看 Q 怎么跟着跑',
+    onDrag: function (P, ctx) {
+      var Q = rot(P);
+
+      // 一开拖就把「静态演示的痕迹」全部收掉：三个采样三角形、三个采样点、
+      // 以及手画的那条 Q₁→Q₃ 粗线。它们只是用来讲「三点共线」的，
+      // 留着会和实时画面糊成一片（三角形是 vt1a/vt1b/vt1c 三条边，
+      // 不是 vt1 —— 少写一个字母就一个都删不掉，画面里那堆紫虚线的来历）。
+      if (ctx.reset) {
+        [
+          'vt1a', 'vt1b', 'vt1c', 'vt2a', 'vt2b', 'vt2c', 'vt3a', 'vt3b', 'vt3c',
+          'vtrace',
+          'vP2', 'vP3', 'vQ2', 'vQ3',
+          'vnP2', 'vnP3', 'vnQ2', 'vnQ3'
+        ].forEach(function (id) { ctx.stage.rip(id); });
+      }
+
+      ctx.push(Q);
+
+      var cq = dist(C, Q) / 50;
+      var near = Math.abs(cq - 8) < 0.06;
+
+      return [
+        // 主动点 / 从动点
+        dot('vP1', P, COL.PURPLE, 6),
+        dot('vQ1', Q, COL.ORANGE, 6.4),
+
+        // 等边三角形 APQ：两条本边虚线，AQ 用实线强调「就是 AP 转过来的」
+        line('vda', A, P, AN.wash('124,58,237', 0.55), 1.8, [6, 5]),
+        line('vdb', P, Q, AN.wash('249,115,22', 0.5), 1.8, [6, 5]),
+        line('vdc', A, Q, COL.ORANGE, 2.2),
+
+        // C 到 Q 的连线：长度就是要求的东西
+        line('vdq', C, Q, COL.RED, 2.4),
+
+        // Q 走过的痕迹（压在 l′ 上，粗一点、半透明，看得出「描」的过程）
+        {
+          id: 'vdtr', k: 'path', d: trailPath(ctx.trail),
+          stroke: AN.wash('249,115,22', 0.42), sw: 7
+        },
+
+        // 字母（P/Q 的标签跟着自己走）
+        AN.txt('vnP1', [P[0], LY - 24], 'P', { size: FS.NOTE, color: COL.PURPLE, weight: 700, halo: false }),
+        AN.txt('vnQ1', [Q[0] - NN[0] * 26, Q[1] - NN[1] * 26], 'Q',
+          { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: false }),
+
+        // 账本换成实时读数
+        AN.txt('vled0', [60, 452], 'P 在 l 上滑，Q 沿 l′ 滑 —— 轨迹是直线',
+          { size: FS.NOTE, color: COL.INK, anchor: 'start', halo: true }),
+        AN.txt('vled1', [60, 477],
+          'CQ = ' + cq.toFixed(2) + ' 格' + (near ? ' · 已经是最小值' : ' · 拖到 Q 落在 T 上，就是最小'),
+          { size: FS.NOTE, color: near ? COL.GREEN : COL.INK, anchor: 'start', halo: true })
+      ];
+    }
+  };
+
   window.MATHLAB_LESSONS = window.MATHLAB_LESSONS || [];
   window.MATHLAB_LESSONS.push({
     id: 'guadou-principle',
@@ -331,6 +409,7 @@
     tags: ['最值', '动点', '瓜豆原理', '旋转', '轨迹', '全等', 'SAS', '点到直线距离'],
     question: '定点 A、定直线 l，P 在 l 上动。把 AP 绕 A 旋转 60° 得到 Q（△APQ 为等边三角形）。求定点 C 到 Q 的距离最小值，以及 Q 的轨迹。',
     thumbStep: 6,
+    drag: { methods: [drag1, null] },
     methods: [
       { name: '描一描：三个 Q 连成线', tier: 'demo', steps: steps1 },
       { name: '证一证：SAS 全等锁死方向', tier: 'proof', steps: steps2 }

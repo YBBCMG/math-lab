@@ -259,6 +259,55 @@
     if (shape && shape.style) paint(shape, next);
   };
 
+  // 就地改写几何（拖动用）。
+  // 和 add/upd 的区别：只改形状属性，不重建节点、不碰 transform / opacity，
+  // 所以既不会触发淡入闪烁，也不会走 .ml-el 的 transform 过渡留下拖影。
+  // 一帧一个元素调一次，代价只有几次 setAttribute。
+  Stage.prototype.live = function (spec) {
+    var g = this.nodes[spec.id];
+    if (!g) return this.add(spec, false);
+
+    var next = Object.assign({}, this.colors[spec.id] || {}, spec);
+    this.colors[spec.id] = next;
+
+    var sh = g.firstChild;
+    if (sh) {
+      switch (next.k) {
+        case 'poly':
+          sh.setAttribute('points', ptsToStr(next.pts));
+          break;
+        case 'line':
+          sh.setAttribute('x1', n(next.a[0])); sh.setAttribute('y1', n(next.a[1]));
+          sh.setAttribute('x2', n(next.b[0])); sh.setAttribute('y2', n(next.b[1]));
+          break;
+        case 'circ':
+          sh.setAttribute('cx', n(next.c[0])); sh.setAttribute('cy', n(next.c[1]));
+          if (next.r != null) sh.setAttribute('r', n(next.r));
+          break;
+        case 'rect':
+          sh.setAttribute('x', n(next.x)); sh.setAttribute('y', n(next.y));
+          if (next.w != null) sh.setAttribute('width', n(next.w));
+          if (next.h != null) sh.setAttribute('height', n(next.h));
+          break;
+        case 'sector':
+          sh.setAttribute('d', sectorPath(next.c, next.r, next.from, next.to));
+          break;
+        case 'arc':
+          sh.setAttribute('d', arcPath(next.c, next.r, next.from, next.to));
+          break;
+        case 'path':
+          sh.setAttribute('d', next.d);
+          break;
+        case 'text':
+          sh.setAttribute('x', n(next.at[0])); sh.setAttribute('y', n(next.at[1]));
+          sh.textContent = next.text;
+          break;
+      }
+      paint(sh, next);
+    }
+    return g;
+  };
+
   // 立即移除，不做淡出。
   // 用于「整张图换一张」：淡出 + 淡入会重叠成一团，读数会糊；这种场合要瞬切。
   Stage.prototype.rip = function (id) {

@@ -142,6 +142,14 @@
   function step() { return list()[st.si]; }
   function method() { return lesson.methods[st.mi]; }
 
+  // 拖动配置：整课一份，或者按解法分开给（两种解法往往连主动点都不一样）
+  function dragCfg(mi) {
+    var d = lesson.drag;
+    if (!d) return null;
+    if (d.methods) return d.methods[mi] || null;
+    return d;
+  }
+
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c];
@@ -250,6 +258,13 @@
     ML.applyStep(stage, L[k], animate !== false);
     paint();
     Sfx.blip(k);
+
+    // 走到本解法最后一步 → 开自由拖动。
+    // 只在这时候开：拖动会接管画面（把 demo 用的采样点删掉、把派生图形改成实时计算的），
+    // 讲一半就被拖走会打乱后面的步骤。
+    if (window.MLDRAG) {
+      window.MLDRAG.sync(svg, stage, dragCfg(st.mi), k === L.length - 1);
+    }
 
     if (st.playing) {
       // 自动播放：节奏由配音决定；没有配音就回落到定时器
