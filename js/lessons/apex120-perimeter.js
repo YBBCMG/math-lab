@@ -318,6 +318,83 @@
     }
   ];
 
+  /* ---------- 拖动探索（只在演示档开） ----------
+     这一课的核心是「先降后升」，三个采样点说得再好也只是三个点。
+     讲完之后把 P 交到手上拖一遍：周长读数一路降到底再升回来，
+     谷底的位置是自己摸出来的。 */
+
+  function trailPath(pts) {
+    if (!pts || !pts.length) return 'M0,0';
+    var step = pts.length > 260 ? 2 : 1;
+    var d = 'M' + AN.nf(pts[0][0]) + ',' + AN.nf(pts[0][1]);
+    for (var i = step; i < pts.length; i += step) {
+      d += ' L' + AN.nf(pts[i][0]) + ',' + AN.nf(pts[i][1]);
+    }
+    return d;
+  }
+
+  var AD_GRID = dist(A, D) / S;                  // = a/2 = 3 格，定值
+  // 最小周长 = a/2 + a√3/2（取等时 DQ + QA 被压成直线 DA″）
+  // 别写成 AD_GRID + Math.sqrt(3) —— 那是 4.73，永远命不中，读数永远灰着
+  var MIN_PERI = AD_GRID + (AD_GRID * Math.sqrt(3));   // 3 + 5.196 = 8.196
+
+  var drag1 = {
+    handle: 'vP1',
+    rail: { a: onL(-3.4), b: onL(3.0) },
+    start: P1,
+    hint: '拖动紫色点 P，看周长先降后升',
+    onDrag: function (P, ctx) {
+      var Q = toQ(P);
+
+      if (ctx.reset) {
+        [
+          'vP2', 'vP3', 'vQ2', 'vQ3', 'vnP2', 'vnP3', 'vnQ2', 'vnQ3',
+          'vql',                                   // 手画的那条 Q₁→Q₃ 粗线
+          'vP0', 'vQ0', 'vdq0', 'vaq0', 'vnP0', 'vnQ0'
+        ].forEach(function (id) { ctx.stage.rip(id); });
+      }
+
+      ctx.push(Q);
+
+      var dq = dist(D, Q) / S;
+      var aq = dist(A, Q) / S;
+      var total = AD_GRID + dq + aq;
+      var near = Math.abs(total - MIN_PERI) < 0.025;
+
+      return [
+        dot('vP1', P, COL.PURPLE, 6),
+        dot('vQ1', Q, COL.ORANGE, 6.4),
+
+        // 两条关键线段：DQ 和 AQ —— 周长的可变部分
+        heavy('vdq1', D, Q, COL.RED, 3.4),
+        heavy('vaq1', Q, A, COL.RED, 3.4),
+
+        // AP 的本边（说明 Q 确实是把 AP 转过来的）
+        line('vdap', A, P, AN.wash('124,58,237', 0.55), 1.8, [6, 5]),
+
+        // Q 走过的痕迹
+        {
+          id: 'vdtr', k: 'path', d: trailPath(ctx.trail),
+          stroke: AN.wash('249,115,22', 0.42), sw: 7
+        },
+
+        AN.txt('vnP1', [P[0] - 10, P[1] + 26], 'P',
+          { size: FS.NOTE, color: COL.PURPLE, weight: 700, halo: false }),
+        AN.txt('vnQ1', [
+          Q[0] + (Q[0] > A[0] ? 22 : -22),
+          Q[1] + (Q[1] > A[1] ? 18 : -16)
+        ], 'Q', { size: FS.NOTE, color: COL.ORANGE, weight: 700, halo: false }),
+
+        AN.txt('vled0', [60, 452], '周长 = AD + DQ + AQ，AD 始终是 3.00 格',
+          { size: FS.NOTE, color: COL.INK, anchor: 'start', halo: true }),
+        AN.txt('vled1', [60, 477],
+          '3.00 + ' + dq.toFixed(2) + ' + ' + aq.toFixed(2) + ' = ' + total.toFixed(2) + ' 格' +
+          (near ? ' · 已经到谷底' : ''),
+          { size: FS.NOTE, color: near ? COL.GREEN : COL.INK, anchor: 'start', halo: true })
+      ];
+    }
+  };
+
   window.MATHLAB_LESSONS = window.MATHLAB_LESSONS || [];
   window.MATHLAB_LESSONS.push({
     id: 'apex120-perimeter',
@@ -327,6 +404,7 @@
     tags: ['最值', '动点', '瓜豆原理', '旋转', '垂直平分线', '对称', '三角不等式', '周长'],
     question: 'AB = AC = a，∠BAC = 120°，l 是 AC 的垂直平分线，P 是 l 上一动点。以 AP 为边作等边 △APQ，连接 DQ。当 △ADQ 的周长最小时 AP = b，求 △ADQ 周长的最小值（用 a、b 表示）。',
     thumbStep: 6,
+    drag: { methods: [drag1, null] },
     methods: [
       { name: '量一量：三个 P 看周长先降后升', tier: 'demo', steps: steps1 },
       { name: '对称 + 三角不等式：压成 DA″', tier: 'proof', steps: steps2 }
