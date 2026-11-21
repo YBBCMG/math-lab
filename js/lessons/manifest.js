@@ -25,5 +25,6 @@ window.LESSON_FILES = [
   'apex120-perimeter.js',
   'ws-a3-bisector.js',
   'ws-b1-perimeter.js',
-  'ws-b2-rotate.js'
+  'ws-b2-rotate.js',
+  'ws-a5-fold.js'
 ];
