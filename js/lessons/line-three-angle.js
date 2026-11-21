@@ -87,13 +87,13 @@
 
   var steps1 = [
     {
-      say: '等腰直角三角形 ABC，∠A = 90°。一条直线 l 过 A，B、C 在 l 同侧，BD、CE 都垂直于 l。',
+      say: '等腰直角三角形 ABC，∠A = 90°。过 A 作一条直线。B、C 都在这条线的同一侧，从 B、C 各向它作垂线，垂足是 D、E。',
       cite: '题设：∠BAC = 90°，AB = AC，BD ⊥ l 于 D，CE ⊥ l 于 E',
       add: [l1, lbL, tri1, segBD, segCE, nA, nB, nC, nD, nE],
       eq: 'AB = AC，∠BAC = 90°'
     },
     {
-      say: 'D、A、E 都落在 l 上，每个点处各有一个 90°。一条线上三个直角，这就是「一线三垂直」。',
+      say: 'D、A、E 都落在这条线上，每个点处各有一个 90°。一条线上三个直角，这就是「一线三垂直」。',
       cite: 'BD ⊥ l ⟹ ∠ADB = 90°；CE ⊥ l ⟹ ∠AEC = 90°；题设 ∠BAC = 90°',
       add: [cap, raD, raE, raA],
       eq: '∠ADB = ∠BAC = ∠AEC = 90°'
