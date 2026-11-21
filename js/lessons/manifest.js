@@ -26,5 +26,11 @@ window.LESSON_FILES = [
   'ws-a3-bisector.js',
   'ws-b1-perimeter.js',
   'ws-b2-rotate.js',
-  'ws-a5-fold.js'
+  'ws-a5-fold.js',
+  'ws-a1-ruler.js',
+  'ws-a2-equilateral.js',
+  'ws-b4-rot60.js',
+  'ws-b3-perp.js',
+  'ws-b5-symmetry.js',
+  'ws-a4-rightmax.js'
 ];
