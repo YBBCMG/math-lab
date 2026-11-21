@@ -141,6 +141,22 @@ button { font-family: inherit; cursor: pointer; }
   border-left: 3px solid var(--blue); border-radius: 8px; margin-top: 12px;
 }
 
+/* 原题照片（真实试卷的题目才有） */
+.lesson-head .srccard {
+  margin-top: 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: #fff; overflow: hidden; cursor: zoom-in;
+  display: flex; align-items: center; gap: 12px; padding: 8px;
+}
+.lesson-head .srccard img {
+  display: block; width: 190px; height: 118px; object-fit: contain;
+  border-radius: 5px; background: #f1f2f5; border: 1px solid #e7e8ec;
+}
+.lesson-head .srchint {
+  font-size: 13px; color: var(--muted);
+}
+.lesson-head .srccard:hover { border-color: var(--blue); }
+.lesson-head .srccard:hover .srchint { color: var(--blue); }
+
 .lesson {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;

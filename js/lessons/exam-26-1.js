@@ -216,6 +216,7 @@
     topic: '几何 · 角平分线',
     tags: ['几何', '角平分线', '三线合一', '等腰', '直角三角形', '内角和'],
     question: '等腰 △ABC 中 AB = AC，AD、CE 是角平分线，CF ⊥ CE 交 AD 延长线于 F，∠B = 2α。求 ∠F（用含 α 的式子表示）。',
+    sourceImage: 'img/exam-26-q.jpg',
     thumbStep: 4,
     methods: [
       {

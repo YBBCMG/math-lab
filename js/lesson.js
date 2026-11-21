@@ -22,6 +22,25 @@
   $('title').textContent = lesson.title;
   $('question').textContent = lesson.question || '';
 
+  /* ---------- 原题照片（只有来自真实试卷的题才有） ---------- */
+  if (lesson.sourceImage) {
+    var card = $('srccard');
+    var img = $('srcimg');
+    img.src = lesson.sourceImage;
+    img.alt = lesson.title + ' · 原题照片';
+    card.hidden = false;
+    card.addEventListener('click', function () {
+      var w = window.open('', '_blank');
+      if (!w) return;
+      w.document.write(
+        '<title>' + lesson.title.replace(/[<&]/g, '') + '</title>' +
+        '<body style="margin:0;background:#101418;display:flex;align-items:center;justify-content:center;min-height:100vh">' +
+        '<img src="' + lesson.sourceImage + '" style="max-width:100%;max-height:100vh">'
+      );
+      w.document.close();
+    });
+  }
+
   var meta = $('meta');
   [['grade', lesson.grade], ['', lesson.topic]].forEach(function (p) {
     if (!p[1]) return;

@@ -445,6 +445,7 @@
     topic: '几何 · 全等模型',
     tags: ['几何', '全等', 'SAS', 'ASA', '截长补短', '等腰', '角平分线'],
     question: '承第 (1) 问，若 ∠B = 2α 中的 α = 18°，用等式表示 CF、AB、BC 三条线段的数量关系，并证明。',
+    sourceImage: 'img/exam-26-q.jpg',
     thumbStep: 5,
     methods: [
       {
