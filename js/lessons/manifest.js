@@ -24,5 +24,6 @@ window.LESSON_FILES = [
   'guadou-principle.js',
   'apex120-perimeter.js',
   'ws-a3-bisector.js',
-  'ws-b1-perimeter.js'
+  'ws-b1-perimeter.js',
+  'ws-b2-rotate.js'
 ];
