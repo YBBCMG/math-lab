@@ -22,5 +22,7 @@ window.LESSON_FILES = [
   'general-horse.js',
   'apollonius-circle.js',
   'guadou-principle.js',
-  'apex120-perimeter.js'
+  'apex120-perimeter.js',
+  'ws-a3-bisector.js',
+  'ws-b1-perimeter.js'
 ];
