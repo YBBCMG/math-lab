@@ -235,9 +235,12 @@
     void say.offsetWidth;
     say.style.animation = '';
 
+    // 依据：早期 5 门课用 why:，后来 28 门课统一用 cite:。
+    // 这里以前只读 s.why，导致只用 cite 的课「依据」面板永远空白（页面有块、有样式，却没内容）。
     var why = $('why');
-    why.textContent = s.why || '';
-    why.style.display = s.why ? 'block' : 'none';
+    var whyText = s.why || s.cite || '';
+    why.textContent = whyText;
+    why.style.display = whyText ? 'block' : 'none';
 
     $('eq').textContent = s.eq || '';
 
