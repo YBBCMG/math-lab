@@ -32,5 +32,11 @@ window.LESSON_FILES = [
   'ws-b4-rot60.js',
   'ws-b3-perp.js',
   'ws-b5-symmetry.js',
-  'ws-a4-rightmax.js'
+  'ws-a4-rightmax.js',
+  'model-bisector-dist.js',
+  'model-bisector-parallel.js',
+  'model-cross-square.js',
+  'model-handshake-square.js',
+  'model-isosceles-median.js',
+  'model-midpoint-quad.js'
 ];

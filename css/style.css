@@ -406,3 +406,9 @@ button { font-family: inherit; cursor: pointer; }
 /* 配音按钮的开关态 */
 .btn.on { background: var(--blue-bg); border-color: #b8cfff; color: #0b47b8; }
 
+
+/* [hidden] 必须是「真的不见」。
+   坑：hidden 属性的效果就是 display:none，但它的优先级最低——任何显式
+   display（比如 .srccard 的 flex）都会把它盖掉。于是「没有原题照片的课」
+   会留一个空图框 + 破图图标，看着像页面坏了。这里做兜底。 */
+[hidden] { display: none !important; }
