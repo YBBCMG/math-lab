@@ -107,7 +107,8 @@
   var vC = AN.vname('vC', C, G);
   var vD = AN.vname('vD', D, G);
   // M 在斜边 AB 上：重心外推方向正好与 AB 重合，字母会压在自己的边上，改走外法向
-  var vM = AN.txt('vM', R(add(M, mul(nAB, 26))), 'M', { size: FS.V, weight: 700, halo: false });
+  // 26 → 30：字母框按官方口径外扩 2.2 后，到边 sAB 只剩 5.78、到 M 点只剩 4.80，都低于门槛 6
+  var vM = AN.txt('vM', R(add(M, mul(nAB, 30))), 'M', { size: FS.V, weight: 700, halo: false });
 
   /* ---------- 角标 ---------- */
   var wA = ML.wedge(A, B, C);          // A 处：AC 与 AB 张成的 30°
@@ -115,22 +116,27 @@
   var wMCA = ML.wedge(C, M, A);        // C 处上半：∠MCA = 30°
   var wMCB = ML.wedge(C, M, B);        // C 处下半：∠MCB = 60°
 
-  var R_A = 70, R_B = 78, R_C = 52;    // 半径随角度递增：30° → 52/70，60° → 78
+  // 半径随角度递增（同一顶点内越大角越大弧）：30° → 92（A）/ 52（C），60° → 78（B）/ 52（C）。
+  // A 处那道弧特意放大到 92：三十度的楔形很窄，标签必须放在 d=116 才同时躲开
+  // 第 8 步 AM 中点的等长刻度与第 7 步 6.5px 的粗红斜边；弧太小标签就会「飘」在远处。
+  var R_A = 92, R_B = 72, R_C = 52;
 
   var aA30 = AN.arc('aA30', A, B, C, R_A, COL.PURPLE, 2.4);
-  var aA30t = AN.txt('aA30t', ML.pt(A[0], A[1], R_A + 30, ML.midDir(wA)), '30°',
+  var aA30t = AN.txt('aA30t', ML.pt(A[0], A[1], R_A + 34, ML.midDir(wA)), '30°',
     { size: FS.NOTE, color: COL.PURPLE, weight: 700, halo: false });
 
   var aB60 = AN.arc('aB60', B, A, C, R_B, COL.BLUE, 2.4);
-  var aB60t = AN.txt('aB60t', ML.pt(B[0], B[1], R_B + 27, ML.midDir(wB)), '60°',
+  // 弧半径 78→72、标签固定在 B 外 105：这样标签离弧 33（原 27，净空 5.56 不达标），
+  // 且绝对位置不变，不会像「把标签往外推」那样撞上 C 处那个 60°
+  var aB60t = AN.txt('aB60t', ML.pt(B[0], B[1], R_B + 33, ML.midDir(wB)), '60°',
     { size: FS.NOTE, color: COL.BLUE, weight: 700, halo: false });
 
   // C 处两道弧同半径、相邻：合起来就是那个直角，切成一上一下三十与六十。
-  // ∠MCA 不写数字 —— 它和 A 处的 30° 同色同值，靠颜色认；一个值只写一次数字。
+  // 一个值只写一次数字：∠MCA 与 A 处的 30° 同色同值，不写；∠MCB 与 B 处的 60° 同色同值，也不写。
+  // 两条弧靠颜色认（紫=三十、蓝=六十）。曾给 ∠MCB 单独加过「60°」，实测与 B 处那个 60° 只隔 4px，
+  // 两个同样的数字并排贴着，反而让人以为是重复标注 —— 删掉。
   var aMCA = AN.arc('aMCA', C, M, A, R_C, COL.PURPLE, 2.2);
   var aMCB = AN.arc('aMCB', C, M, B, R_C, COL.BLUE, 2.2);
-  var aMCBt = AN.txt('aMCBt', ML.pt(C[0], C[1], R_C + 26, ML.midDir(wMCB)), '60°',
-    { size: FS.NOTE, color: COL.BLUE, weight: 700, halo: false });
 
   /* ---------- 证法一：拼接（倍长直角边） ---------- */
   var sCD = ln('sCD', C, D, COL.GREY, 2.2, [7, 5]);       // 延长段，虚线才是「新造出来的」
@@ -181,13 +187,14 @@
 
   /* ---------- 置顶顺序（数组越靠后越上层） ----------
      粗线写在细线/边之后、小刻度之前：粗线要在边上面，刻度要在粗线上面。 */
-  var LIFT1 = ['sAB', 'sBC', 'sCA', 'hlBD', 'hlAB', 'sCD', 'sAD', 'rtC', 'rtCD',
+  var LIFT1 = ['sAB', 'sBC', 'sCA', 'sCD', 'sAD', 'rtC', 'rtCD',
+    'hlBD', 'hlAB',
     'aA30', 'aA30t', 'aB60', 'aB60t',
     'tkBC1', 'tkCD1', 'tkAD5', 'tkAB5',
     'dD', 'vA', 'vB', 'vC', 'vD', 'cap'];
 
   var LIFT2 = ['sAB', 'sBC', 'sCA', 'rtC', 'sCM',
-    'aA30', 'aA30t', 'aB60', 'aB60t', 'aMCA', 'aMCB', 'aMCBt',
+    'aA30', 'aA30t', 'aB60', 'aB60t', 'aMCA', 'aMCB',
     'tkAM', 'tkMB', 'tkCM', 'tkBC2',
     'dM', 'vA', 'vB', 'vC', 'vM', 'cap'];
 
@@ -209,6 +216,7 @@
     {
       say: '先把第三个角补出来。三角形三个内角加起来是一百八十度，直角占掉九十度，A 处再占掉三十度，剩下归 B，等于六十度。B 处这道蓝色的弧，弧上标的就是这个六十度。这个六十度后面要用两次，先记住它。',
       cite: '三角形内角和 180°：∠B = 180° − ∠C − ∠A = 180° − 90° − 30° = 60°',
+      delNow: ALL_LED,
       add: [aB60, aB60t].concat(led(2, 0, '∠B = 180° − 90° − 30°'), led(2, 1, '= 60°', { color: COL.BLUE })),
       eq: '∠B = 180° − ∠C − ∠A = 60°'
     },
@@ -301,7 +309,7 @@
       say: 'C 处那个直角，被 CM 从中间切成了两块：上面一块是角 MCA，三十度；下面一块是角 MCB。两块合起来正好是九十度，所以角 MCB 等于九十减去三十，也就是六十度。这道蓝色的弧和 B 处那道蓝色弧是同一个颜色，表示它们都是六十度。',
       cite: '∠ACB = 90° = ∠MCA + ∠MCB ⟹ ∠MCB = 90° − 30° = 60°',
       delNow: ALL_LED,
-      add: [aMCB, aMCBt].concat(
+      add: [aMCB].concat(
         led(10, 0, '∠ACB = 90°'),
         led(10, 1, '= ∠MCA + ∠MCB'),
         led(10, 2, '⟹ ∠MCB = 90° − 30° = 60°', { color: COL.BLUE })),
@@ -327,7 +335,7 @@
       say: '两条路都通到同一个结论，这个模型就算立住了。顺手把三条边一起算出来：BC 是斜边的一半；再用勾股定理，AC 的平方等于斜边的平方减去 BC 的平方，也就是斜边平方的四分之三，开出来 AC 是斜边的二分之根号三。所以三条边一比，就是 一 比 根号三 比 二。',
       cite: 'BC = AB/2；AC² = AB² − BC² = 3AB²/4 ⟹ AC = (√3/2)·AB；BC : AC : AB = 1 : √3 : 2',
       delNow: ['sCM', 'dM', 'vM', 'tkAM', 'tkMB', 'tkCM', 'tkBC2',
-        'aMCA', 'aMCB', 'aMCBt', 'fCMB'].concat(ALL_LED),
+        'aMCA', 'aMCB', 'fCMB'].concat(ALL_LED),
       add: [rBC, rAC, rAB].concat(
         led(12, 0, 'BC : AC : AB', { weight: 700 }),
         led(12, 1, '= 1 : √3 : 2', { color: COL.RED, weight: 700, size: 18 }),
@@ -336,12 +344,14 @@
       eq: 'BC : AC : AB = 1 : √3 : 2'
     },
 
-    /* 13 逆命题：先把已知的角标撤掉，防循环论证 */
+    /* 13 逆命题：先把已知的角标撤掉，防循环论证。
+       C 处只补一道 ∠MCB 的弧、不补数字 —— 它和 B 处那个 60° 同色同值，
+       一个值只写一次数字（这是站里的角标纪律）。 */
     {
       say: '反过来问一句：一个直角三角形里，如果有一条直角边等于斜边的一半，它正对着的那个角是不是三十度？注意，这回三十度和六十度都不是已知了，所以先把 A 处和 B 处的角标都撤掉。仍然取斜边中点 M：斜边中线还是等于斜边的一半，所以 CM 和 MB 都等于 AB 的一半；题目又说 BC 也是 AB 的一半，于是 CM、MB、BC 三条一样长，三角形 CMB 是等边三角形。等边三角形每个角都是六十度，B 就是六十度；回到大三角形，A 等于九十减六十，还是三十度。逆命题成立。',
       cite: '已知 BC = AB/2；CM = MB = AB/2 ⟹ CM = MB = BC ⟹ △CMB 等边 ⟹ ∠B = 60° ⟹ ∠A = 90° − 60° = 30°',
       delNow: ['aA30', 'aA30t', 'aB60', 'aB60t', 'rBC', 'rAC', 'rAB'].concat(ALL_LED),
-      add: [sCM, dM, vM, tkAM, tkMB, tkCM, tkBC2, fCMB, aB60, aB60t].concat(
+      add: [sCM, dM, vM, tkAM, tkMB, tkCM, tkBC2, fCMB, aMCB, aB60, aB60t].concat(
         led(13, 0, '已知 BC = AB/2，M 是 AB 中点'),
         led(13, 1, 'CM = MB = AB/2 = BC', { color: COL.GREEN }),
         led(13, 2, '⟹ △CMB 等边 ⟹ ∠B = 60°', { color: COL.BLUE }),
