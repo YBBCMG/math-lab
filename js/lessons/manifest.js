@@ -38,5 +38,7 @@ window.LESSON_FILES = [
   'model-cross-square.js',
   'model-handshake-square.js',
   'model-isosceles-median.js',
-  'model-midpoint-quad.js'
+  'model-midpoint-quad.js',
+  'model-right-triangle-30.js',
+  'model-bisector-sas.js'
 ];
